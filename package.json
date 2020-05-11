@@ -1,0 +1,27 @@
+{
+  "name": "kuma_backend",
+  "version": "1.0.0",
+  "description": "Kuma Online Bookstore is an online bookstore built for the details of the book you are looking for and certainly 100% free",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "validator": "^13.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kubil-ismail/Kuma_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kubil-ismail/Kuma_backend/issues"
+  },
+  "homepage": "https://github.com/kubil-ismail/Kuma_backend#readme"
+}
