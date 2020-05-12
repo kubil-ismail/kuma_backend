@@ -15,6 +15,13 @@ app.get('/', (req, res) => {
   res.send('Welcome to Kuma Backend')
 })
 
+// Import Routes
+// const auth = require('./src/routes/auth')
+const books = require('./src/routes/api/bookRoutes')
+
+// app.use('/auth', auth) // Auth Route
+app.use('/book', books) // Books Route
+
 // Error Route
 app.get('*', (req, res) => {
   res.status(400).send('Pages not found')
