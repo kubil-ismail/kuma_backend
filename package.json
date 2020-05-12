@@ -4,6 +4,7 @@
   "description": "Kuma Online Bookstore is an online bookstore built for the details of the book you are looking for and certainly 100% free",
   "main": "index.js",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

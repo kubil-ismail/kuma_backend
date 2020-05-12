@@ -16,10 +16,10 @@ app.get('/', (req, res) => {
 })
 
 // Import Routes
-// const auth = require('./src/routes/auth')
+const auth = require('./src/routes/api/authRoutes')
 const books = require('./src/routes/api/bookRoutes')
 
-// app.use('/auth', auth) // Auth Route
+app.use('/auth', auth) // Auth Route
 app.use('/book', books) // Books Route
 
 // Error Route
