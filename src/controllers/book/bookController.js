@@ -25,7 +25,7 @@ module.exports = {
       }
 
       const { filename } = req.file
-      const { name, description, genreId, authorId, statusId, published, language, rating, favorite } = req.body
+      const { name, description, genreId, authorId, statusId, published, language } = req.body
       const data = {
         name: name,
         description: description,
@@ -48,7 +48,7 @@ module.exports = {
   updateBook: async (req, res) => {
     const { id } = req.params
     const getBook = await bookModel.findBookId({ id: parseInt(id) })
-    const { name, description, genreId, authorId, statusId, published, language, rating, favorite } = req.body
+    const { name, description, genreId, authorId, statusId, published, language } = req.body
     const data = [
       {
         name: name,
