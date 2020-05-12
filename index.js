@@ -14,16 +14,13 @@ app.use(bodyParser.urlencoded({
 app.use('/book/cover/', express.static('public/assets/cover'))
 app.use('/profile/cover/', express.static('public/assets/profile'))
 
-// Default Route
-app.get('/', (req, res) => {
-  res.send('Welcome to Kuma Backend')
-})
-
 // Import Routes
+const home = require('./src/routes/index')
 const auth = require('./src/routes/api/authRoutes')
 const books = require('./src/routes/api/book/bookRoutes')
 const bookAuthors = require('./src/routes/api/book/authorRoutes')
 
+app.use('/', home) // Auth Route
 app.use('/auth', auth) // Auth Route
 app.use('/book', books) // Books Route
 app.use('/author', bookAuthors) // Book Authors Route
