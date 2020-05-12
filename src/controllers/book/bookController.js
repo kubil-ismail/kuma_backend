@@ -1,6 +1,6 @@
-const bookModel = require('../models/bookModel')
-const pagination = require('../utils/pagination')
-const upload = require('../utils/multer')
+const bookModel = require('../../models/book/bookModel')
+const pagination = require('../../utils/pagination')
+const upload = require('../../utils/multer')
 
 module.exports = {
   getBook: async (req, res) => {
@@ -29,14 +29,12 @@ module.exports = {
       const data = {
         name: name,
         description: description,
-        cover: filename,
+        cover: `book/cover/${filename}`,
         genre_id: genreId,
         author_id: authorId,
         status_id: statusId,
         published: published,
-        language: language,
-        rating: rating,
-        favorite: favorite
+        language: language
       }
       const createBook = bookModel.createBook(data)
 
@@ -60,8 +58,7 @@ module.exports = {
         status_id: statusId,
         published: published,
         language: language,
-        rating: rating,
-        favorite: favorite
+        update_at: new Date()
       },
       { id: parseInt(id) }
     ]
@@ -88,7 +85,7 @@ module.exports = {
       const { id } = req.params
       const { filename } = req.file
       const data = [
-        { cover: filename },
+        { cover: `book/cover/${filename}`, update_at: new Date() },
         { id: parseInt(id) }
       ]
 
