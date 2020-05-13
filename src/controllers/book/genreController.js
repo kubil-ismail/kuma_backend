@@ -6,9 +6,15 @@ module.exports = {
     const getGenre = genreModel.getGenre({ id: parseInt(id) })
 
     getGenre.then((result) => {
-      res.status(200).send({ status: true, data: result })
+      res.status(200).send({
+        status: true,
+        data: result
+      })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal diakses' })
+      res.status(400).send({
+        status: false,
+        message: 'Data gagal diakses'
+      })
     })
   },
   createGenre: (req, res) => {
@@ -16,9 +22,15 @@ module.exports = {
     const createGenre = genreModel.createGenre({ name: name })
 
     createGenre.then(_ => {
-      res.status(201).send({ status: true, message: 'Data berhasil ditambah' })
+      res.status(201).send({
+        status: true,
+        message: 'Data berhasil ditambah'
+      })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal ditambah' })
+      res.status(400).send({
+        status: false,
+        message: 'Data gagal ditambah'
+      })
     })
   },
   updateGenre: async (req, res) => {
@@ -27,16 +39,28 @@ module.exports = {
     const checkGenreId = await genreModel.findGenreId({ id: parseInt(id) })
 
     if (checkGenreId) {
-      const data = [{ name: name, update_at: new Date() }, { id: parseInt(id) }]
+      const data = [
+        { name: name, update_at: new Date() },
+        { id: parseInt(id) }
+      ]
       const updateGenre = genreModel.updateGenre(data)
 
       updateGenre.then(_ => {
-        res.status(200).send({ status: true, message: 'Data berhasil diubah' })
+        res.status(200).send({
+          status: true,
+          message: 'Data berhasil diubah'
+        })
       }).catch(_ => {
-        res.status(400).send({ status: false, message: 'Data gagal diubah' })
+        res.status(400).send({
+          status: false,
+          message: 'Data gagal diubah'
+        })
       })
     } else {
-      res.status(400).send({ status: false, message: 'Id Genre tidak terdaftar' })
+      res.status(400).send({
+        status: false,
+        message: 'Id Genre tidak terdaftar'
+      })
     }
   },
   deleteGenre: (req, res) => {
@@ -44,9 +68,15 @@ module.exports = {
     const deleteGenre = genreModel.deleteGenre({ id: id })
 
     deleteGenre.then(_ => {
-      res.status(200).send({ status: true, message: 'Data berhasil dihapus' })
+      res.status(200).send({
+        status: true,
+        message: 'Data berhasil dihapus'
+      })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal dihapus' })
+      res.status(400).send({
+        status: false,
+        message: 'Data gagal dihapus'
+      })
     })
   }
 }

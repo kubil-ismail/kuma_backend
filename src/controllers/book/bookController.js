@@ -11,17 +11,30 @@ module.exports = {
     const getBook = bookModel.getBook({ id: parseInt(id), name: q }, paginate.start, paginate.end)
 
     getBook.then((result) => {
-      res.status(200).send({ status: true, data: result, info: paginate })
+      res.status(200).send({
+        status: true,
+        data: result,
+        info: paginate
+      })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal diakses' })
+      res.status(400).send({
+        status: false,
+        message: 'Data gagal diakses'
+      })
     })
   },
   createBook: (req, res) => {
     upload(req, res, () => {
       if (req.fileValidationError) {
-        return res.status(400).send({ status: true, message: req.fileValidationError })
+        return res.status(400).send({
+          status: false,
+          message: req.fileValidationError
+        })
       } else if (!req.file) {
-        return res.status(400).send({ status: true, message: 'Please select an image to upload' })
+        return res.status(400).send({
+          status: false,
+          message: 'Please select an image to upload'
+        })
       }
 
       const { filename } = req.file
@@ -39,9 +52,16 @@ module.exports = {
       const createBook = bookModel.createBook(data)
 
       createBook.then(_ => {
-        res.status(201).send({ status: true, message: 'Data berhasil ditambah', data: data })
+        res.status(201).send({
+          status: true,
+          message: 'Data berhasil ditambah',
+          data: data
+        })
       }).catch(_ => {
-        res.status(400).send({ status: false, message: 'Data gagal ditambah' })
+        res.status(400).send({
+          status: false,
+          message: 'Data gagal ditambah'
+        })
       })
     })
   },
@@ -66,34 +86,60 @@ module.exports = {
     if (getBook) {
       const updateBook = bookModel.updateBook(data)
       updateBook.then(_ => {
-        res.status(200).send({ status: true, message: 'Data berhasil diubah', data: data[0] })
+        res.status(200).send({
+          status: true,
+          message: 'Data berhasil diubah',
+          data: data[0]
+        })
       }).catch(_ => {
-        res.status(400).send({ status: false, message: 'Data gagal diubah' })
+        res.status(400).send({
+          status: false,
+          message: 'Data gagal diubah'
+        })
       })
     } else {
-      res.status(400).send({ status: false, message: 'Buku tidak tersedia' })
+      res.status(400).send({
+        status: false,
+        message: 'Buku tidak tersedia'
+      })
     }
   },
   updateCoverBook: (req, res) => {
     upload(req, res, () => {
       if (req.fileValidationError) {
-        return res.status(400).send({ status: true, message: req.fileValidationError })
+        return res.status(400).send({
+          status: true,
+          message: req.fileValidationError
+        })
       } else if (!req.file) {
-        return res.status(400).send({ status: true, message: 'Please select an image to upload' })
+        return res.status(400).send({
+          status: true,
+          message: 'Please select an image to upload'
+        })
       }
 
       const { id } = req.params
       const { filename } = req.file
       const data = [
-        { cover: `book/cover/${filename}`, update_at: new Date() },
+        {
+          cover: `book/cover/${filename}`,
+          update_at: new Date()
+        },
         { id: parseInt(id) }
       ]
 
       const updateBook = bookModel.updateBook(data)
       updateBook.then(_ => {
-        res.status(200).send({ status: true, message: 'Cover berhasil diubah', data: data[0] })
+        res.status(200).send({
+          status: true,
+          message: 'Cover berhasil diubah',
+          data: data[0]
+        })
       }).catch(_ => {
-        res.status(400).send({ status: false, message: 'Cover gagal diubah' })
+        res.status(400).send({
+          status: false,
+          message: 'Cover gagal diubah'
+        })
       })
     })
   },
@@ -102,9 +148,15 @@ module.exports = {
     const deleteBook = bookModel.deleteBook({ id: id })
 
     deleteBook.then(_ => {
-      res.status(200).send({ status: true, message: 'Data berhasil dihapus' })
+      res.status(200).send({
+        status: true,
+        message: 'Data berhasil dihapus'
+      })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal dihapus' })
+      res.status(400).send({
+        status: false,
+        message: 'Data gagal dihapus'
+      })
     })
   }
 }
