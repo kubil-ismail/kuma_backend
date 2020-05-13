@@ -18,12 +18,14 @@ app.use('/profile/cover/', express.static('public/assets/profile'))
 const home = require('./src/routes/index')
 const auth = require('./src/routes/api/authRoutes')
 const books = require('./src/routes/api/book/bookRoutes')
-const bookAuthors = require('./src/routes/api/book/authorRoutes')
+const authorBooks = require('./src/routes/api/book/authorRoutes')
+const genreBooks = require('./src/routes/api/book/genreRoutes')
 
 app.use('/', home) // Auth Route
 app.use('/auth', auth) // Auth Route
 app.use('/book', books) // Books Route
-app.use('/author', bookAuthors) // Book Authors Route
+app.use('/author', authorBooks) // Book Authors Route
+app.use('/genre', genreBooks) // Book Genres Route
 
 // Error Route
 app.get('*', (req, res) => {

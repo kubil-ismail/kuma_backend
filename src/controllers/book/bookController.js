@@ -13,7 +13,7 @@ module.exports = {
     getBook.then((result) => {
       res.status(200).send({ status: true, data: result, info: paginate })
     }).catch(_ => {
-      res.status(400).send({ status: false, message: 'Data gagal diakses' })
+      // res.status(400).send({ status: false, message: 'Data gagal diakses' })
     })
   },
   createBook: (req, res) => {
@@ -41,6 +41,7 @@ module.exports = {
       createBook.then(_ => {
         res.status(201).send({ status: true, message: 'Data berhasil ditambah', data: data })
       }).catch(_ => {
+        console.log(_)
         res.status(400).send({ status: false, message: 'Data gagal ditambah' })
       })
     })
