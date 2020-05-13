@@ -2,12 +2,6 @@ const db = require('../utils/database')
 const table = 'users'
 
 module.exports = {
-  loginAuth: (data) => {
-
-  },
-  registerAuth: (data) => {
-
-  },
   findEmail: (data) => {
     const query = `SELECT email FROM ${table} WHERE ?`
 
