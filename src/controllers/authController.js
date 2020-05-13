@@ -15,10 +15,10 @@ module.exports = {
       if (checkPassword) {
         // Create Api Key
         jwt.sign({ _result }, APP_KEY, (err, token) => {
-          if (err) {
-            res.status(400).send({ status: false, message: 'Unable to sign in at this time, try for a few moments' })
-          } else {
+          if (!err) {
             res.status(200).send({ status: true, message: 'Login successful', apiKey: token })
+          } else {
+            res.status(400).send({ status: false, message: 'Unable to sign in at this time, try for a few moments' })
           }
         })
       } else {
