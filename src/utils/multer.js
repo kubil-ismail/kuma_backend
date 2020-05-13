@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
     callback(null, 'public/assets/cover/')
   },
   filename: function (req, file, callback) {
-    callback(null, 'book-' + Date.now() + path.extname(file.originalname))
+    callback(null, `book ${Date.now()}${path.extname(file.originalname)}`)
   }
 })
 

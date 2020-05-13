@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const auth = require('../../../utils/auth')
-const { getGenre, createGenre, updateGenre, deleteGenre } = require('../../../controllers/book/genresController')
+const { getGenre, createGenre, updateGenre, deleteGenre } = require('../../../controllers/book/genreController')
 
 router.get('/:id?', auth, getGenre)
 router.post('/', auth, createGenre)
