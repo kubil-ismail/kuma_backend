@@ -43,9 +43,9 @@ module.exports = {
   },
   registerAuth: (req, res) => {
     const { email, password, pin } = req.body
-    const checkPin = bcrypt.compareSync(pin, APP_PIN)
-
+    const checkPin = pin ? bcrypt.compareSync(pin, APP_PIN) : null
     const checkEmail = authModel.findEmail({ email: email })
+
     checkEmail.then(_result => {
       if (!_result) {
         const data = {

@@ -1,6 +1,7 @@
 const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
+const { Validator } = require('node-input-validator')
 
 module.exports = {
   getBook: async (req, res) => {
@@ -39,6 +40,27 @@ module.exports = {
 
       const { filename } = req.file
       const { name, description, genreId, authorId, statusId, published, language } = req.body
+
+      // Validator
+      const valid = new Validator(req.body, {
+        name: 'required|string',
+        description: 'required|string',
+        genreId: 'required|numeric',
+        authorId: 'required|numeric',
+        statusId: 'required|numeric',
+        published: 'required|dateiso',
+        language: 'required|string'
+      })
+
+      valid.check().then((matched) => {
+        if (!matched) {
+          res.status(422).send({
+            status: false,
+            error: valid.errors
+          })
+        }
+      })
+
       const data = {
         name: name,
         description: description,
@@ -69,6 +91,7 @@ module.exports = {
     const { id } = req.params
     const getBook = await bookModel.findBookId({ id: parseInt(id) })
     const { name, description, genreId, authorId, statusId, published, language } = req.body
+
     const data = [
       {
         name: name,
@@ -108,12 +131,12 @@ module.exports = {
     upload(req, res, () => {
       if (req.fileValidationError) {
         return res.status(400).send({
-          status: true,
+          status: false,
           message: req.fileValidationError
         })
       } else if (!req.file) {
         return res.status(400).send({
-          status: true,
+          status: false,
           message: 'Please select an image to upload'
         })
       }
