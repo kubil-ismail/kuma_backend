@@ -1,31 +1,33 @@
 const db = require('../../utils/database')
-const table = 'user_details'
+const table = 'user_sosmed'
 
 module.exports = {
-  getProfile: (data) => {
-    let query = `SELECT ${table}.*, users.email, users.role_id FROM ${table} `
-    query += 'JOIN users ON user_details.user_id = users.id ' // Join Table Query
-    query += parseInt(data.id) ? `WHERE ${table}.id = ${parseInt(data.id)}` : '' // Search Id Query
+  getSosmed: (data) => {
+    const query = `SELECT * FROM ${table} ${parseInt(data.id) ? 'WHERE ?' : ''}`
 
     return new Promise((resolve, reject) => {
-      db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
+      if (data.id) {
+        db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res))
+      } else {
+        db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
+      }
     })
   },
-  createProfile: (data) => {
+  createSosmed: (data) => {
     const query = `INSERT INTO ${table} SET ?`
 
     return new Promise((resolve, reject) => {
       db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
-  updateProfile: (data) => {
+  updateSosmed: (data) => {
     const query = `UPDATE ${table} SET ? WHERE ?`
 
     return new Promise((resolve, reject) => {
       db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
-  deleteProfile: (data) => {
+  deleteSosmed: (data) => {
     const query = `DELETE FROM ${table} WHERE ?`
 
     return new Promise((resolve, reject) => {

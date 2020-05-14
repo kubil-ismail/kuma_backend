@@ -70,11 +70,11 @@ module.exports = {
 
     deleteProfile.then(_ => {
       res.status(200).send(resData(
-        true, 'Data berhasil dihapus', { userId: id }
+        true, 'Delete profile success', { userId: id }
       ))
     }).catch(_ => {
       res.status(400).send(resData(
-        false, 'Data gagal dihapus'
+        false, 'Data profile success'
       ))
     })
   }

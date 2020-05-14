@@ -21,6 +21,7 @@ const books = require('./src/routes/api/book/bookRoutes')
 const authorBooks = require('./src/routes/api/book/authorRoutes')
 const genreBooks = require('./src/routes/api/book/genreRoutes')
 const profileUser = require('./src/routes/api/user/profileRoutes')
+const sosmedUser = require('./src/routes/api/user/sosmedRoutes')
 
 app.use('/', home) // Auth Route
 app.use('/auth', auth) // Auth Route
@@ -30,6 +31,7 @@ app.use('/author', authorBooks) // Book Authors Route
 app.use('/genre', genreBooks) // Book Genres Route
 
 app.use('/profile', profileUser) // Profile User Route
+app.use('/sosmed', sosmedUser) // Sosmed User Route
 
 // Error Route
 app.get('*', (req, res) => {
