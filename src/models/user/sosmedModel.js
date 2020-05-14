@@ -13,6 +13,13 @@ module.exports = {
       }
     })
   },
+  findSosmedId: (data) => {
+    const query = `SELECT id FROM ${table} WHERE ?`
+
+    return new Promise((resolve, reject) => {
+      db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res.length))
+    })
+  },
   createSosmed: (data) => {
     const query = `INSERT INTO ${table} SET ?`
 

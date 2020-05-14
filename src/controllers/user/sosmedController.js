@@ -35,28 +35,36 @@ module.exports = {
       ))
     })
   },
-  updateSosmed: (req, res) => {
+  updateSosmed: async (req, res) => {
     const { id } = req.params
     const { facebook, instagram, twitter } = req.body
-    const data = [
-      {
-        facebook: facebook,
-        instagram: instagram,
-        twitter: twitter
-      },
-      { id: parseInt(id) }
-    ]
-    const updateSosmed = sosmedModel.updateSosmed(data)
+    const checkSosmedId = await sosmedModel.findSosmedId({ id: parseInt(id) })
 
-    updateSosmed.then(_ => {
-      res.status(200).send(resData(
-        true, 'Update sosmed success', data
-      ))
-    }).catch(_ => {
+    if (checkSosmedId) {
+      const data = [
+        {
+          facebook: facebook,
+          instagram: instagram,
+          twitter: twitter
+        },
+        { id: parseInt(id) }
+      ]
+      const updateSosmed = sosmedModel.updateSosmed(data)
+
+      updateSosmed.then(_ => {
+        res.status(200).send(resData(
+          true, 'Update sosmed success', data
+        ))
+      }).catch(_ => {
+        res.status(400).send(resData(
+          false, 'Update sosmed failed'
+        ))
+      })
+    } else {
       res.status(400).send(resData(
-        false, 'Update sosmed failed'
+        false, 'Sosmed not found'
       ))
-    })
+    }
   },
   deleteSosmed: (req, res) => {
     const { id } = req.params

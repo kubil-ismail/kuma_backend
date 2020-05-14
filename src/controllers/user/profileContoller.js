@@ -38,31 +38,39 @@ module.exports = {
       ))
     })
   },
-  updateProfile: (req, res) => {
+  updateProfile: async (req, res) => {
     const { id } = req.params
     const { name, bio, birthdate, gender, sosmedId, userId } = req.body
-    const data = [
-      {
-        fullname: name,
-        bio: bio,
-        birthdate: birthdate,
-        gender: gender,
-        social_media_id: sosmedId,
-        user_id: userId
-      },
-      { id: parseInt(id) }
-    ]
-    const updateProfile = profileModel.updateProfile(data)
+    const checkProfileId = await profileModel.findProfileId({ id: parseInt(id) })
 
-    updateProfile.then(_ => {
-      res.status(200).send(resData(
-        true, 'Update profile success', data
-      ))
-    }).catch(_ => {
+    if (checkProfileId) {
+      const data = [
+        {
+          fullname: name,
+          bio: bio,
+          birthdate: birthdate,
+          gender: gender,
+          social_media_id: sosmedId,
+          user_id: userId
+        },
+        { id: parseInt(id) }
+      ]
+      const updateProfile = profileModel.updateProfile(data)
+
+      updateProfile.then(_ => {
+        res.status(200).send(resData(
+          true, 'Update profile success', data
+        ))
+      }).catch(_ => {
+        res.status(400).send(resData(
+          false, 'Update profile failed'
+        ))
+      })
+    } else {
       res.status(400).send(resData(
-        false, 'Update profile failed'
+        false, 'Profile not found'
       ))
-    })
+    }
   },
   deleteProfile: (req, res) => {
     const { id } = req.params

@@ -53,7 +53,7 @@ module.exports = {
       })
     } else {
       res.status(400).send(resData(
-        false, 'Author not found'
+        false, 'Genre not found'
       ))
     }
   },

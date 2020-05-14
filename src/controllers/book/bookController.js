@@ -19,6 +19,7 @@ module.exports = {
         true, 'Get book success', result, paginate
       ))
     }).catch(_ => {
+      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))

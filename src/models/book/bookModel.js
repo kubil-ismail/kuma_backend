@@ -3,12 +3,16 @@ const table = 'books'
 
 module.exports = {
   getBook: (data = false, start, end) => {
-    let query = ''
+    let query = `SELECT books.*, book_genres.name AS genre, book_authors.name AS author, book_status.name AS status, books.id FROM ${table} ` // Get all book
+    query += 'JOIN book_genres ON book_genres.id = books.genre_id ' // Join Table Query
+    query += 'JOIN book_authors ON book_authors.id = books.author_id ' // Join Table Query
+    query += 'JOIN book_status ON book_status.id = books.status_id ' // Join Table Query
+
     // If id not null add where condition
     if (data.name) {
-      query = `SELECT * FROM ${table} WHERE name LIKE '%${data.name}%' LIMIT ${end} OFFSET ${start}`
+      query += `WHERE name LIKE '%${data.name}%' LIMIT ${end} OFFSET ${start}`
     } else {
-      query = `SELECT * FROM ${table} ${parseInt(data.id) ? 'WHERE ?' : ''} LIMIT ${end} OFFSET ${start}`
+      query += `${parseInt(data.id) ? 'WHERE ?' : ''} LIMIT ${end} OFFSET ${start}`
     }
 
     return new Promise((resolve, reject) => {
