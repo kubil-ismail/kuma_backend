@@ -1,5 +1,5 @@
 const { Validator } = require('node-input-validator')
-const resData = require('../helper/response')
+const resData = require('../../helper/response')
 
 const validSosmed = (req, res, next) => {
   // Validator
