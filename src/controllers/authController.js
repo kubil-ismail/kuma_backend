@@ -4,6 +4,8 @@ const authModel = require('../models/authModel')
 const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10)
 const jwt = require('jsonwebtoken')
+const emailVerify = require('../utils/emailVerify')
+const uniqid = require('uniqid')
 
 module.exports = {
   loginAuth: (req, res) => {
@@ -11,6 +13,13 @@ module.exports = {
     const checkLogin = authModel.findAccount({ email: email })
 
     checkLogin.then(_result => {
+      // Check account status
+      if (!_result.activate) {
+        res.status(400).send({
+          status: false,
+          message: 'Please activate your account !'
+        })
+      }
       const checkPassword = bcrypt.compareSync(password, _result.password)
       if (checkPassword) {
         // Create Api Key
@@ -53,12 +62,27 @@ module.exports = {
           password: bcrypt.hashSync(password, salt),
           role_id: checkPin ? 2 : 1
         }
-        const createUser = authModel.createUser(data)
-        createUser.then(_result => {
-          res.status(200).send({
-            status: true,
-            message: 'Registration successful',
-            userId: _result.insertId
+        // Send Email verify
+        const sendEmail = emailVerify({ email: email, code: uniqid() })
+        sendEmail.then(_result => {
+          // Create New User
+          const createUser = authModel.createUser(data)
+          createUser.then(_result => {
+            res.status(200).send({
+              status: true,
+              message: 'Registration successful',
+              userId: _result.insertId
+            })
+          }).catch(_ => {
+            res.status(400).send({
+              status: false,
+              message: 'Registration successful'
+            })
+          })
+        }).catch(_ => {
+          res.status(400).send({
+            status: false,
+            message: 'Email failed to send'
           })
         })
       } else {
@@ -71,5 +95,31 @@ module.exports = {
       status: false,
       message: 'Cant Sign In Right Now'
     }))
+  },
+  activateAuth: (req, res) => {
+    const { email, code } = req.body
+    const checkCode = authModel.findCode({ email: email, code: code })
+
+    checkCode.then(_result => {
+      if (_result.length < 1) {
+        res.status(400).send({
+          status: false,
+          message: 'Invalid Code'
+        })
+      } else {
+        const activate = authModel.activateUser({ email: email })
+        activate.then(_ => {
+          res.status(200).send({
+            status: true,
+            message: 'Activation successful'
+          })
+        }).catch(err => console.log(err))
+      }
+    }).catch(_ => {
+      res.status(400).send({
+        status: false,
+        message: 'Activation failed'
+      })
+    })
   }
 }

@@ -4,7 +4,6 @@ const validTest = (req, res, next) => {
   // Validator
   const valid = new Validator(req.body, {
     email: 'required|email',
-    password: 'required',
     pin: 'numeric'
   })
 
