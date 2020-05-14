@@ -1,4 +1,5 @@
 const { Validator } = require('node-input-validator')
+const resData = require('../helper/response')
 
 const validCreate = (req, res, next) => {
   // Validator
@@ -13,10 +14,9 @@ const validCreate = (req, res, next) => {
 
   valid.check().then((matched) => {
     if (!matched) {
-      res.status(422).send({
-        status: false,
-        error: valid.errors
-      })
+      res.status(422).send(resData(
+        false, valid.errors
+      ))
     } else {
       next()
     }
