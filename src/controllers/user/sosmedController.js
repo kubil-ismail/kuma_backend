@@ -45,7 +45,8 @@ module.exports = {
         {
           facebook: facebook,
           instagram: instagram,
-          twitter: twitter
+          twitter: twitter,
+          update_at: new Date()
         },
         { id: parseInt(id) }
       ]

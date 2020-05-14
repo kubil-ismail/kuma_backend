@@ -51,7 +51,8 @@ module.exports = {
           birthdate: birthdate,
           gender: gender,
           social_media_id: sosmedId,
-          user_id: userId
+          user_id: userId,
+          update_at: new Date()
         },
         { id: parseInt(id) }
       ]
