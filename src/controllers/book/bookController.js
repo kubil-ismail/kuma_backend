@@ -9,10 +9,10 @@ const resData = require('../../helper/response')
 module.exports = {
   getBook: async (req, res) => {
     const { id } = req.params
-    const { q } = req.query
-    const totalData = await bookModel.countBook({ name: q })
+    const { search } = req.query
+    const totalData = await bookModel.countBook({ name: search })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
-    const getBook = bookModel.getBook({ id: parseInt(id), name: q }, paginate.start, paginate.end)
+    const getBook = bookModel.getBook({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 
     getBook.then((result) => {
       res.status(200).send(resData(
