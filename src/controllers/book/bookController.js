@@ -1,7 +1,10 @@
+require('dotenv').config()
+const { APP_URL } = process.env
 const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
 const { Validator } = require('node-input-validator')
+const resData = require('../../helper/response')
 
 module.exports = {
   getBook: async (req, res) => {
@@ -12,35 +15,26 @@ module.exports = {
     const getBook = bookModel.getBook({ id: parseInt(id), name: q }, paginate.start, paginate.end)
 
     getBook.then((result) => {
-      res.status(200).send({
-        status: true,
-        data: result,
-        info: paginate
-      })
+      res.status(200).send(resData(
+        true, 'Get book success', result, paginate
+      ))
     }).catch(_ => {
-      res.status(400).send({
-        status: false,
-        message: 'Data gagal diakses'
-      })
+      res.status(400).send(resData(
+        false, 'Get book failed'
+      ))
     })
   },
   createBook: (req, res) => {
     upload(req, res, () => {
       if (req.fileValidationError) {
-        return res.status(400).send({
-          status: false,
-          message: req.fileValidationError
-        })
+        return res.status(400).send(resData(
+          false, req.fileValidationError
+        ))
       } else if (!req.file) {
-        return res.status(400).send({
-          status: false,
-          message: 'Please select an image to upload'
-        })
+        return res.status(400).send(resData(
+          false, 'Please select an image to upload'
+        ))
       }
-
-      const { filename } = req.file
-      const { name, description, genreId, authorId, statusId, published, language } = req.body
-
       // Validator
       const valid = new Validator(req.body, {
         name: 'required|string',
@@ -54,17 +48,18 @@ module.exports = {
 
       valid.check().then((matched) => {
         if (!matched) {
-          res.status(422).send({
-            status: false,
-            error: valid.errors
-          })
+          res.status(422).send(resData(
+            false, valid.errors
+          ))
         }
       })
 
+      const { filename } = req.file
+      const { name, description, genreId, authorId, statusId, published, language } = req.body
       const data = {
         name: name,
         description: description,
-        cover: `book/cover/${filename}`,
+        cover: `${APP_URL}book/cover/${filename}`,
         genre_id: genreId,
         author_id: authorId,
         status_id: statusId,
@@ -74,16 +69,13 @@ module.exports = {
       const createBook = bookModel.createBook(data)
 
       createBook.then(_ => {
-        res.status(201).send({
-          status: true,
-          message: 'Data berhasil ditambah',
-          data: data
-        })
+        res.status(201).send(resData(
+          true, 'Create book success', data
+        ))
       }).catch(_ => {
-        res.status(400).send({
-          status: false,
-          message: 'Data gagal ditambah'
-        })
+        res.status(400).send(resData(
+          false, 'Create book failed'
+        ))
       })
     })
   },
@@ -109,43 +101,37 @@ module.exports = {
     if (getBook) {
       const updateBook = bookModel.updateBook(data)
       updateBook.then(_ => {
-        res.status(200).send({
-          status: true,
-          message: 'Data berhasil diubah',
-          data: data[0]
-        })
+        res.status(200).send(resData(
+          true, 'Update book success', data
+        ))
       }).catch(_ => {
-        res.status(400).send({
-          status: false,
-          message: 'Data gagal diubah'
-        })
+        res.status(400).send(resData(
+          false, 'Update book failed'
+        ))
       })
     } else {
-      res.status(400).send({
-        status: false,
-        message: 'Buku tidak tersedia'
-      })
+      res.status(400).send(resData(
+        false, 'Book not found'
+      ))
     }
   },
   updateCoverBook: (req, res) => {
     upload(req, res, () => {
       if (req.fileValidationError) {
-        return res.status(400).send({
-          status: false,
-          message: req.fileValidationError
-        })
+        return res.status(400).send(resData(
+          false, req.fileValidationError
+        ))
       } else if (!req.file) {
-        return res.status(400).send({
-          status: false,
-          message: 'Please select an image to upload'
-        })
+        return res.status(400).send(resData(
+          false, 'Please select an image to upload'
+        ))
       }
 
       const { id } = req.params
       const { filename } = req.file
       const data = [
         {
-          cover: `book/cover/${filename}`,
+          cover: `${APP_URL}book/cover/${filename}`,
           update_at: new Date()
         },
         { id: parseInt(id) }
@@ -153,16 +139,13 @@ module.exports = {
 
       const updateBook = bookModel.updateBook(data)
       updateBook.then(_ => {
-        res.status(200).send({
-          status: true,
-          message: 'Cover berhasil diubah',
-          data: data[0]
-        })
+        res.status(200).send(resData(
+          true, 'Update cover book success', data
+        ))
       }).catch(_ => {
-        res.status(400).send({
-          status: false,
-          message: 'Cover gagal diubah'
-        })
+        res.status(400).send(resData(
+          false, 'Update cover book failed'
+        ))
       })
     })
   },
@@ -171,15 +154,13 @@ module.exports = {
     const deleteBook = bookModel.deleteBook({ id: id })
 
     deleteBook.then(_ => {
-      res.status(200).send({
-        status: true,
-        message: 'Data berhasil dihapus'
-      })
+      res.status(200).send(resData(
+        true, 'Delete book success', { idBook: id }
+      ))
     }).catch(_ => {
-      res.status(400).send({
-        status: false,
-        message: 'Data gagal dihapus'
-      })
+      res.status(400).send(resData(
+        false, 'Delete book failed'
+      ))
     })
   }
 }

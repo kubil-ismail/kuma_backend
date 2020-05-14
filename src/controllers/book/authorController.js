@@ -1,4 +1,5 @@
 const authorModel = require('../../models/book/authorModel')
+const resData = require('../../helper/response')
 
 module.exports = {
   getAuthor: (req, res) => {
@@ -6,15 +7,13 @@ module.exports = {
     const getAuthor = authorModel.getAuthor({ id: parseInt(id) })
 
     getAuthor.then((result) => {
-      res.status(200).send({
-        status: true,
-        data: result
-      })
+      res.status(200).send(resData(
+        true, 'Get author success', result
+      ))
     }).catch(_ => {
-      res.status(400).send({
-        status: false,
-        message: 'Data gagal diakses'
-      })
+      res.status(400).send(resData(
+        false, 'Get author failed'
+      ))
     })
   },
   createAuthor: (req, res) => {
@@ -22,15 +21,13 @@ module.exports = {
     const createAuthor = authorModel.createAuthor({ name: name })
 
     createAuthor.then(_ => {
-      res.status(201).send({
-        status: true,
-        message: 'Data berhasil ditambah'
-      })
+      res.status(201).send(resData(
+        true, 'Create author success', { name: name }
+      ))
     }).catch(_ => {
-      res.status(400).send({
-        status: false,
-        message: 'Data gagal ditambah'
-      })
+      res.status(400).send(resData(
+        false, 'Create author failed'
+      ))
     })
   },
   updateAuthor: async (req, res) => {
@@ -43,21 +40,18 @@ module.exports = {
       const updateAuthor = authorModel.updateAuthor(data)
 
       updateAuthor.then(_ => {
-        res.status(200).send({
-          status: true,
-          message: 'Data berhasil diubah'
-        })
+        res.status(200).send(resData(
+          true, 'Update author success', { idAuthor: id, name: name }
+        ))
       }).catch(_ => {
-        res.status(400).send({
-          status: false,
-          message: 'Data gagal diubah'
-        })
+        res.status(400).send(resData(
+          false, 'Update author failed'
+        ))
       })
     } else {
-      res.status(400).send({
-        status: false,
-        message: 'Id author tidak terdaftar'
-      })
+      res.status(400).send(resData(
+        false, 'Author not found'
+      ))
     }
   },
   deleteAuthor: (req, res) => {
@@ -65,15 +59,13 @@ module.exports = {
     const deleteAuthor = authorModel.deleteAuthor({ id: id })
 
     deleteAuthor.then(_ => {
-      res.status(200).send({
-        status: true,
-        message: 'Data berhasil dihapus'
-      })
+      res.status(200).send(resData(
+        true, 'Delete author success', { idAuthor: id }
+      ))
     }).catch(_ => {
-      res.status(400).send({
-        status: false,
-        message: 'Data gagal dihapus'
-      })
+      res.status(400).send(resData(
+        false, 'Delete author failed'
+      ))
     })
   }
 }
