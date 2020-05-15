@@ -3,24 +3,23 @@ const table = 'books'
 
 module.exports = {
   getBook: (data = false, start, end) => {
-    let query = `SELECT books.*, book_genres.name AS genre, book_authors.name AS author, book_status.name AS status, books.id FROM ${table} ` // Get all book
-    query += 'JOIN book_genres ON book_genres.id = books.genre_id ' // Join Table Query
-    query += 'JOIN book_authors ON book_authors.id = books.author_id ' // Join Table Query
-    query += 'JOIN book_status ON book_status.id = books.status_id ' // Join Table Query
+    let query = `SELECT ${table}.*, book_genres.name AS genre, book_authors.name AS author, book_status.name AS status, ${table}.id FROM ${table} ` // Get all book
+    query += `JOIN book_genres ON book_genres.id = ${table}.genre_id ` // Join Table Query
+    query += `JOIN book_authors ON book_authors.id = ${table}.author_id ` // Join Table Query
+    query += `JOIN book_status ON book_status.id = ${table}.status_id ` // Join Table Query
 
     // If id not null add where condition
     if (data.name) {
-      query += `WHERE name LIKE '%${data.name}%' LIMIT ${end} OFFSET ${start}`
+      query += `WHERE ${table}.name LIKE '%${data.name}%'`
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
+    } else if (data.id) {
+      query += `${parseInt(data.id) ? `WHERE ${table}.id = ${parseInt(data.id)}` : ''}`
     } else {
-      query += `${parseInt(data.id) ? 'WHERE ?' : ''} LIMIT ${end} OFFSET ${start}`
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
     }
 
     return new Promise((resolve, reject) => {
-      if (data.id) {
-        db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res))
-      } else {
-        db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
-      }
+      db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
   findBookId: (data) => {
@@ -31,7 +30,7 @@ module.exports = {
     })
   },
   countBook: (data) => {
-    const query = `SELECT id FROM ${table} ${data.name ? `WHERE name LIKE '%${data.name}%'` : 'WHERE ?'}`
+    const query = `SELECT id FROM ${table} ${data.name ? `WHERE name LIKE '%${data.name}%'` : ''}`
 
     return new Promise((resolve, reject) => {
       if (data.name) {

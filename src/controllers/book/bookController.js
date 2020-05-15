@@ -1,5 +1,5 @@
-require('dotenv').config()
-const { APP_URL } = process.env
+// require('dotenv').config()
+// const { APP_URL } = process.env
 const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
@@ -19,6 +19,7 @@ module.exports = {
         true, 'Get book success', result, paginate
       ))
     }).catch(_ => {
+      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))
