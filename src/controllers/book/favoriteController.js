@@ -7,9 +7,15 @@ module.exports = {
     const getFavorite = favoriteModel.getFavorite({ id: parseInt(id) })
 
     getFavorite.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get favorite success', result
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Favorite not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get favorite success', result
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get favorite failed'

@@ -7,9 +7,15 @@ module.exports = {
     const getGenre = genreModel.getGenre({ id: parseInt(id) })
 
     getGenre.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get genre success', result
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Genre not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get genre success', result
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get genre failed'

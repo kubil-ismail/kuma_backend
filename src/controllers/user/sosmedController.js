@@ -7,9 +7,15 @@ module.exports = {
     const getSosmed = sosmedModel.getSosmed({ id: parseInt(id) })
 
     getSosmed.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get sosmed success', result
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Sosmed not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get sosmed success', result
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get sosmed failed'

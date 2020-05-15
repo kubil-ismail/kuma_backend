@@ -11,9 +11,15 @@ module.exports = {
     const getReview = reviewModel.getReview({ id: parseInt(id), query }, paginate.start, paginate.end)
 
     getReview.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get review success', result, paginate
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Review not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get review success', result, paginate
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get review failed'

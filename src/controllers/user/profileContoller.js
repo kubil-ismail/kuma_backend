@@ -11,9 +11,15 @@ module.exports = {
     const getProfile = profileModel.getProfile({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 
     getProfile.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get profile success', result, paginate
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Profile not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get profile success', result, paginate
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get profile failed'

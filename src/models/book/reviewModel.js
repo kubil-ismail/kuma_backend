@@ -9,14 +9,14 @@ module.exports = {
 
     // If query search active
     if (parseInt(data.query.book_id)) {
-      query += `WHERE book_id = ${parseInt(data.query.book_id)} ` // Get Where
+      query += `WHERE ${table}.book_id = ${parseInt(data.query.book_id)} ` // Get Where
     } else if (parseInt(data.query.user_id)) {
-      query += `WHERE user_id = ${parseInt(data.query.user_id)} ` // Get Where
+      query += `WHERE ${table}.user_id = ${parseInt(data.query.user_id)} ` // Get Where
     }
 
     // If data id active
     if (parseInt(data.id)) {
-      query += `WHERE id = ${parseInt(data.id)} ` // Get Where
+      query += `WHERE ${table}.id = ${parseInt(data.id)} ` // Get Where
     } else {
       query += `LIMIT ${start}, ${end} ` // Limit Table Query
     }
