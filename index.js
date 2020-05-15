@@ -2,8 +2,12 @@ require('dotenv').config()
 const { APP_PORT } = process.env
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const resData = require('./src/helper/response')
+
+// CORS
+app.use(cors())
 
 // Setting up bodyParser to use json and set it to req.body
 app.use(bodyParser.json())
@@ -22,6 +26,7 @@ const books = require('./src/routes/api/book/bookRoutes')
 const authorBooks = require('./src/routes/api/book/authorRoutes')
 const genreBooks = require('./src/routes/api/book/genreRoutes')
 const reviewBooks = require('./src/routes/api/book/reviewRoutes')
+const favoriteBooks = require('./src/routes/api/book/favoriteRoutes')
 const profileUser = require('./src/routes/api/user/profileRoutes')
 const sosmedUser = require('./src/routes/api/user/sosmedRoutes')
 
@@ -32,6 +37,7 @@ app.use('/author', authorBooks) // Book Authors Route
 app.use('/book', books) // Books Route
 app.use('/genre', genreBooks) // Book Genres Route
 app.use('/review', reviewBooks) // Book Reviews Route
+app.use('/favorite', favoriteBooks) // Book Reviews Route
 
 app.use('/profile', profileUser) // Profile User Route
 app.use('/sosmed', sosmedUser) // Sosmed User Route
