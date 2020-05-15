@@ -6,9 +6,9 @@ const updateValidator = (req, res, next) => {
   const valid = new Validator(req.body, {
     name: 'string',
     description: 'string',
-    genreId: 'numeric',
-    authorId: 'numeric',
-    statusId: 'numeric',
+    genre_id: 'numeric',
+    author_id: 'numeric',
+    status_id: 'numeric',
     published: 'dateiso',
     language: 'string'
   })

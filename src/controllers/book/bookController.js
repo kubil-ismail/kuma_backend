@@ -107,7 +107,7 @@ module.exports = {
     }
   },
   updateCoverBook: (req, res) => {
-    upload(req, res, () => {
+    upload(req, res, async () => {
       if (req.fileValidationError) {
         return res.status(400).send(resData(
           false, req.fileValidationError
@@ -120,24 +120,32 @@ module.exports = {
 
       const { id } = req.params
       const { filename } = req.file
-      const data = [
-        {
-          cover: `book/cover/${filename}`,
-          update_at: new Date()
-        },
-        { id: parseInt(id) }
-      ]
+      const getBook = await bookModel.findBookId({ id: parseInt(id) })
 
-      const updateBook = bookModel.updateBook(data)
-      updateBook.then(_ => {
-        res.status(200).send(resData(
-          true, 'Update cover book success', data
-        ))
-      }).catch(_ => {
+      if (getBook) {
+        const data = [
+          {
+            cover: `book/cover/${filename}`,
+            update_at: new Date()
+          },
+          { id: parseInt(id) }
+        ]
+
+        const updateBook = bookModel.updateBook(data)
+        updateBook.then(_ => {
+          res.status(200).send(resData(
+            true, 'Update cover book success', data
+          ))
+        }).catch(_ => {
+          res.status(400).send(resData(
+            false, 'Update cover book failed'
+          ))
+        })
+      } else {
         res.status(400).send(resData(
-          false, 'Update cover book failed'
+          false, 'Book not found'
         ))
-      })
+      }
     })
   },
   deleteBook: (req, res) => {
