@@ -13,7 +13,7 @@ module.exports = {
       query += `WHERE ${table}.name LIKE '%${data.name}%'`
       query += `LIMIT ${start}, ${end}` // Limit Table Query
     } else if (data.id) {
-      query += `${parseInt(data.id) ? `WHERE ${table}.id = ${parseInt(data.id)}` : ''}`
+      query += `WHERE ${table}.id = ${parseInt(data.id)}`
     } else {
       query += `LIMIT ${start}, ${end}` // Limit Table Query
     }
@@ -30,7 +30,11 @@ module.exports = {
     })
   },
   countBook: (data) => {
-    const query = `SELECT id FROM ${table} ${data.name ? `WHERE name LIKE '%${data.name}%'` : ''}`
+    let query = `SELECT books.id FROM ${table} `
+    query += `JOIN book_genres ON book_genres.id = ${table}.genre_id ` // Join Table Query
+    query += `JOIN book_authors ON book_authors.id = ${table}.author_id ` // Join Table Query
+    query += `JOIN book_status ON book_status.id = ${table}.status_id ` // Join Table Query
+    query += `${data.name ? `WHERE ${table}.name LIKE '%${data.name}%' ` : ''}` // On Search active
 
     return new Promise((resolve, reject) => {
       if (data.name) {

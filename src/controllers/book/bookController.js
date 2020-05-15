@@ -1,5 +1,3 @@
-// require('dotenv').config()
-// const { APP_URL } = process.env
 const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
@@ -10,7 +8,7 @@ module.exports = {
   getBook: async (req, res) => {
     const { id } = req.params
     const { search } = req.query
-    const totalData = await bookModel.countBook({ name: search })
+    const totalData = id ? 0 : await bookModel.countBook({ name: search })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
     const getBook = bookModel.getBook({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 

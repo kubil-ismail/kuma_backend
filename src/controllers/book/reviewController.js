@@ -1,14 +1,18 @@
 const reviewModel = require('../../models/book/reviewModel')
 const resData = require('../../helper/response')
+const pagination = require('../../utils/pagination')
 
 module.exports = {
-  getReview: (req, res) => {
+  getReview: async (req, res) => {
     const { id } = req.params
-    const getReview = reviewModel.getReview({ id: parseInt(id) })
+    const query = req.query
+    const totalData = id ? 0 : await reviewModel.countReview(query)
+    const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
+    const getReview = reviewModel.getReview({ id: parseInt(id), query }, paginate.start, paginate.end)
 
     getReview.then((result) => {
       res.status(200).send(resData(
-        true, 'Get review success', result
+        true, 'Get review success', result, paginate
       ))
     }).catch(_ => {
       res.status(400).send(resData(

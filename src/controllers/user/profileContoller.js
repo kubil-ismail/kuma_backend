@@ -1,14 +1,18 @@
 const profileModel = require('../../models/user/profileModel')
 const resData = require('../../helper/response')
+const pagination = require('../../utils/pagination')
 
 module.exports = {
   getProfile: async (req, res) => {
     const { id } = req.params
-    const getProfile = profileModel.getProfile({ id: parseInt(id) })
+    const { search } = req.query
+    const totalData = id ? 0 : await profileModel.countProfile({ name: search })
+    const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
+    const getProfile = profileModel.getProfile({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 
     getProfile.then((result) => {
       res.status(200).send(resData(
-        true, 'Get profile success', result
+        true, 'Get profile success', result, paginate
       ))
     }).catch(_ => {
       res.status(400).send(resData(

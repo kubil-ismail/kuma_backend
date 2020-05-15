@@ -2,11 +2,20 @@ const db = require('../../utils/database')
 const table = 'user_details'
 
 module.exports = {
-  getProfile: (data) => {
+  getProfile: (data, start, end) => {
     let query = `SELECT ${table}.*, users.email, users.role_id, user_sosmed.*, ${table}.id FROM ${table} `
     query += 'JOIN users ON user_details.user_id = users.id ' // Join Table Query
     query += 'JOIN user_sosmed ON user_details.social_media_id = user_sosmed.id ' // Join Table Query
-    query += parseInt(data.id) ? `WHERE ${table}.id = ${parseInt(data.id)}` : '' // Search Id Query
+
+    // If id not null add where condition
+    if (data.name) {
+      query += `WHERE ${table}.fullname LIKE '%${data.name}%'`
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
+    } else if (data.id) {
+      query += `WHERE ${table}.id = ${parseInt(data.id)}`
+    } else {
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
+    }
 
     return new Promise((resolve, reject) => {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
@@ -14,6 +23,22 @@ module.exports = {
   },
   findProfileId: (data) => {
     const query = `SELECT id FROM ${table} WHERE ?`
+
+    return new Promise((resolve, reject) => {
+      db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res.length))
+    })
+  },
+  countProfile: (data) => {
+    let query = `SELECT ${table}.id FROM ${table} `
+    query += `JOIN users ON ${table}.user_id = users.id ` // Join Table Query
+    query += `JOIN user_sosmed ON ${table}.social_media_id = user_sosmed.id ` // Join Table Query
+    query += `${data.name ? `WHERE ${table}.fullname LIKE '%${data.name}%'` : ''}` // On Search active
+
+    if (parseInt(data.book_id)) {
+      query += `WHERE book_id = ${data.book_id} ` // Get Where
+    } else if (parseInt(data.user_id)) {
+      query += `WHERE user_id = ${data.user_id} ` // Get Where
+    }
 
     return new Promise((resolve, reject) => {
       db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res.length))
