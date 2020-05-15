@@ -46,7 +46,7 @@ module.exports = {
         genreId: 'required|numeric',
         authorId: 'required|numeric',
         statusId: 'required|numeric',
-        published: 'required|dateiso',
+        published: 'required',
         language: 'required|string'
       })
 

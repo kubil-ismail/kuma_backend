@@ -9,7 +9,6 @@ const updateValidator = (req, res, next) => {
     genre_id: 'numeric',
     author_id: 'numeric',
     status_id: 'numeric',
-    published: 'dateiso',
     language: 'string'
   })
 
