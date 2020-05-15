@@ -19,7 +19,6 @@ module.exports = {
         true, 'Get book success', result, paginate
       ))
     }).catch(_ => {
-      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))
@@ -60,7 +59,7 @@ module.exports = {
       const data = {
         name: name,
         description: description,
-        cover: `${APP_URL}book/cover/${filename}`,
+        cover: `book/cover/${filename}`,
         genre_id: genreId,
         author_id: authorId,
         status_id: statusId,
@@ -83,21 +82,8 @@ module.exports = {
   updateBook: async (req, res) => {
     const { id } = req.params
     const getBook = await bookModel.findBookId({ id: parseInt(id) })
-    const { name, description, genreId, authorId, statusId, published, language } = req.body
-
-    const data = [
-      {
-        name: name,
-        description: description,
-        genre_id: genreId,
-        author_id: authorId,
-        status_id: statusId,
-        published: published,
-        language: language,
-        update_at: new Date()
-      },
-      { id: parseInt(id) }
-    ]
+    const updateData = req.body
+    const data = [updateData, { id: parseInt(id) }]
 
     if (getBook) {
       const updateBook = bookModel.updateBook(data)
@@ -132,7 +118,7 @@ module.exports = {
       const { filename } = req.file
       const data = [
         {
-          cover: `${APP_URL}book/cover/${filename}`,
+          cover: `book/cover/${filename}`,
           update_at: new Date()
         },
         { id: parseInt(id) }

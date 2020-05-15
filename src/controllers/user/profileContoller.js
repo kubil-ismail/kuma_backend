@@ -17,20 +17,12 @@ module.exports = {
     })
   },
   createProfile: (req, res) => {
-    const { name, bio, birthdate, gender, sosmedId, userId } = req.body
-    const data = {
-      fullname: name,
-      bio: bio,
-      birthdate: birthdate,
-      gender: gender,
-      social_media_id: sosmedId,
-      user_id: userId
-    }
-    const createProfile = profileModel.createProfile(data)
+    const createData = req.body
+    const createProfile = profileModel.createProfile(createData)
 
     createProfile.then(_ => {
       res.status(201).send(resData(
-        true, 'Create profile success', data
+        true, 'Create profile success', createData
       ))
     }).catch(_ => {
       res.status(400).send(resData(
@@ -40,22 +32,11 @@ module.exports = {
   },
   updateProfile: async (req, res) => {
     const { id } = req.params
-    const { name, bio, birthdate, gender, sosmedId, userId } = req.body
+    const updateData = req.body
     const checkProfileId = await profileModel.findProfileId({ id: parseInt(id) })
 
     if (checkProfileId) {
-      const data = [
-        {
-          fullname: name,
-          bio: bio,
-          birthdate: birthdate,
-          gender: gender,
-          social_media_id: sosmedId,
-          user_id: userId,
-          update_at: new Date()
-        },
-        { id: parseInt(id) }
-      ]
+      const data = [updateData, { id: parseInt(id) }]
       const updateProfile = profileModel.updateProfile(data)
 
       updateProfile.then(_ => {
@@ -63,6 +44,7 @@ module.exports = {
           true, 'Update profile success', data
         ))
       }).catch(_ => {
+        console.log(_)
         res.status(400).send(resData(
           false, 'Update profile failed'
         ))

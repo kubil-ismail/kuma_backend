@@ -32,14 +32,11 @@ module.exports = {
   },
   updateGenre: async (req, res) => {
     const { id } = req.params
-    const { name } = req.body
+    const updateData = req.body
     const checkGenreId = await genreModel.findGenreId({ id: parseInt(id) })
 
     if (checkGenreId) {
-      const data = [
-        { name: name, update_at: new Date() },
-        { id: parseInt(id) }
-      ]
+      const data = [updateData, { id: parseInt(id) }]
       const updateGenre = genreModel.updateGenre(data)
 
       updateGenre.then(_ => {

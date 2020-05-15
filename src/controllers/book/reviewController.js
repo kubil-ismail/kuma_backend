@@ -17,18 +17,12 @@ module.exports = {
     })
   },
   createReview: (req, res) => {
-    const { bookId, userId, review, rating } = req.body
-    const data = {
-      book_id: bookId,
-      user_id: userId,
-      review: review,
-      rating: rating
-    }
-    const createReview = reviewModel.createReview(data)
+    const creteData = req.body
+    const createReview = reviewModel.createReview(creteData)
 
     createReview.then(_ => {
       res.status(201).send(resData(
-        true, 'Create review success', data
+        true, 'Create review success', creteData
       ))
     }).catch(_ => {
       res.status(400).send(resData(
@@ -38,20 +32,12 @@ module.exports = {
   },
   updateReview: async (req, res) => {
     const { id } = req.params
-    const { bookId, userId, review, rating } = req.body
+    const updateData = req.body
     const checkReviewId = await reviewModel.findReviewId({ id: parseInt(id) })
 
     if (checkReviewId) {
-      const data = [
-        {
-          book_id: bookId,
-          user_id: userId,
-          review: review,
-          rating: rating,
-          update_at: new Date()
-        },
-        { id: parseInt(id) }
-      ]
+      // Update data & ID data
+      const data = [updateData, { id: parseInt(id) }]
       const updateReview = reviewModel.updateReview(data)
 
       updateReview.then(_ => {

@@ -17,17 +17,12 @@ module.exports = {
     })
   },
   createSosmed: (req, res) => {
-    const { facebook, instagram, twitter } = req.body
-    const data = {
-      facebook: facebook,
-      instagram: instagram,
-      twitter: twitter
-    }
-    const createSosmed = sosmedModel.createSosmed(data)
+    const createData = req.body
+    const createSosmed = sosmedModel.createSosmed(createData)
 
     createSosmed.then(_ => {
       res.status(201).send(resData(
-        true, 'Create sosmed success', data
+        true, 'Create sosmed success', createData
       ))
     }).catch(_ => {
       res.status(400).send(resData(
@@ -37,19 +32,11 @@ module.exports = {
   },
   updateSosmed: async (req, res) => {
     const { id } = req.params
-    const { facebook, instagram, twitter } = req.body
+    const updateData = req.body
     const checkSosmedId = await sosmedModel.findSosmedId({ id: parseInt(id) })
 
     if (checkSosmedId) {
-      const data = [
-        {
-          facebook: facebook,
-          instagram: instagram,
-          twitter: twitter,
-          update_at: new Date()
-        },
-        { id: parseInt(id) }
-      ]
+      const data = [updateData, { id: parseInt(id) }]
       const updateSosmed = sosmedModel.updateSosmed(data)
 
       updateSosmed.then(_ => {
