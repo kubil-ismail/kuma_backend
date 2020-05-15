@@ -8,6 +8,12 @@ module.exports = {
     query += `JOIN book_authors ON book_authors.id = ${table}.author_id ` // Join Table Query
     query += `JOIN book_status ON book_status.id = ${table}.status_id ` // Join Table Query
 
+    if (data.sort) {
+      query += `ORDER BY ${table}.name DESC `
+    } else {
+      query += `ORDER BY ${table}.name ASC `
+    }
+
     // If id not null add where condition
     if (data.name) {
       query += `WHERE ${table}.name LIKE '%${data.name}%'`
@@ -17,6 +23,8 @@ module.exports = {
     } else {
       query += `LIMIT ${start}, ${end}` // Limit Table Query
     }
+
+    console.log(query)
 
     return new Promise((resolve, reject) => {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))

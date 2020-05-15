@@ -7,10 +7,10 @@ const resData = require('../../helper/response')
 module.exports = {
   getBook: async (req, res) => {
     const { id } = req.params
-    const { search } = req.query
+    const { search, sort } = req.query
     const totalData = id ? 0 : await bookModel.countBook({ name: search })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
-    const getBook = bookModel.getBook({ id: parseInt(id), name: search }, paginate.start, paginate.end)
+    const getBook = bookModel.getBook({ id: parseInt(id), name: search, sort: sort }, paginate.start, paginate.end)
 
     getBook.then((result) => {
       if (result.length < 1) {
@@ -23,6 +23,7 @@ module.exports = {
         ))
       }
     }).catch(_ => {
+      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))
