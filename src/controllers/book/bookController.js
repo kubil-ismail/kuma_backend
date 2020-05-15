@@ -15,11 +15,16 @@ module.exports = {
     const getBook = bookModel.getBook({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 
     getBook.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get book success', result, paginate
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Book not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get book success', result, paginate
+        ))
+      }
     }).catch(_ => {
-      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))
