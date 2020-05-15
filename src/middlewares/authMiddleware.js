@@ -8,10 +8,15 @@ const validTest = (req, res, next) => {
     pin: 'numeric'
   })
 
+  let error = ''
+
   valid.check().then((matched) => {
+    for (const prop in valid.errors) {
+      error = valid.errors[prop].message
+    }
     if (!matched) {
       res.status(422).send(resData(
-        false, valid.errors
+        false, error
       ))
     } else {
       next()
