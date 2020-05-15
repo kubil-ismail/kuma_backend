@@ -76,6 +76,7 @@ module.exports = {
             ))
           })
         }).catch(_ => {
+          console.log(_)
           res.status(400).send(resData(
             false, 'Email failed to send'
           ))
