@@ -1,4 +1,5 @@
 # Kuma Backend
+![](https://img.shields.io/github/stars/kubi-codes/cisetup) ![](https://img.shields.io/github/forks/kubi-codes/cisetup) ![](https://img.shields.io/github/tag/kubi-codes/cisetup) ![](https://img.shields.io/github/release/kubi-codes/cisetup) ![](https://img.shields.io/github/issues/pandaokubi-codes/cisetup)
 
 Kuma Backend is an Kuma Book API. It's built on the Node Js, uses Mysql & Express.
 
