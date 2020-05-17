@@ -54,7 +54,6 @@ module.exports = {
           true, 'Update profile success', data
         ))
       }).catch(_ => {
-        console.log(_)
         res.status(400).send(resData(
           false, 'Update profile failed'
         ))

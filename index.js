@@ -6,8 +6,22 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const resData = require('./src/helper/response')
 
-// CORS
+// CORS All
 app.use(cors())
+
+// Allowed Origins
+var allowedOrigins = ['https://www.jagoanhosting.com/']
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // (like mobile apps or curl requests)
+    if (!origin) return callback(null, true); if (allowedOrigins.indexOf(origin) === -1) {
+      var msg = 'The CORS policy for this site does not ' +
+        'allow access from the specified Origin.'
+      return callback(new Error(msg), false)
+    } return callback(null, true)
+  }
+}))
 
 // Setting up bodyParser to use json and set it to req.body
 app.use(bodyParser.json())
@@ -44,7 +58,7 @@ app.use('/sosmed', sosmedUser) // Sosmed User Route
 
 // Error Route
 app.get('*', (req, res) => {
-  res.status(400).send(resData(
+  res.status(404).send(resData(
     false, 'Page not found'
   ))
 })
