@@ -7,9 +7,15 @@ module.exports = {
     const getAuthor = authorModel.getAuthor({ id: parseInt(id) })
 
     getAuthor.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get author success', result
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Author not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get author success', result
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get author failed'

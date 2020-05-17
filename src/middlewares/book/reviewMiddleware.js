@@ -1,15 +1,13 @@
 const { Validator } = require('node-input-validator')
 const resData = require('../../helper/response')
 
-const updateValidator = (req, res, next) => {
+const validTest = (req, res, next) => {
   // Validator
   const valid = new Validator(req.body, {
-    name: 'string',
-    description: 'string',
-    genre_id: 'numeric',
-    author_id: 'numeric',
-    status_id: 'numeric',
-    language: 'string'
+    book_id: 'required|string',
+    user_id: 'required|string',
+    review: 'string|maxLength:300',
+    rating: 'numeric'
   })
 
   let error = ''
@@ -28,4 +26,4 @@ const updateValidator = (req, res, next) => {
   })
 }
 
-module.exports = updateValidator
+module.exports = validTest

@@ -1,6 +1,8 @@
 require('dotenv').config()
 const { APP_EMAIL, APP_EMAIL_PASS, APP_EMAIL_SERVICE } = process.env
 const nodemailer = require('nodemailer')
+const fs = require('fs')
+const mustache = require('mustache')
 const authModel = require('../models/authModel')
 
 const emailVerify = async (payload) => {
@@ -11,6 +13,8 @@ const emailVerify = async (payload) => {
       pass: APP_EMAIL_PASS
     }
   }
+
+  const template = fs.readFileSync('./src/helper/emailTemplate.html', { encoding: 'utf-8' })
   const transporter = await nodemailer.createTransport(configMail)
   const createKey = authModel.createActivator({
     user_email: payload.email,
@@ -21,7 +25,7 @@ const emailVerify = async (payload) => {
       from: 'kumabook@gmail.com',
       to: payload.email,
       subject: 'Activate your account',
-      text: `Thank you for registering in Kuma book, Here your activate code ${payload.code}`
+      html: mustache.render(template, { ...payload })
     }
     return new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (err, info) => err ? reject(Error(err)) : resolve(info))

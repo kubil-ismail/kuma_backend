@@ -3,20 +3,31 @@ const table = 'books'
 
 module.exports = {
   getBook: (data = false, start, end) => {
-    let query = ''
-    // If id not null add where condition
-    if (data.name) {
-      query = `SELECT * FROM ${table} WHERE name LIKE '%${data.name}%' LIMIT ${end} OFFSET ${start}`
+    let query = `SELECT ${table}.*, book_genres.name AS genre, book_authors.name AS author, book_status.name AS status, ${table}.id FROM ${table} ` // Get all book
+    query += `JOIN book_genres ON book_genres.id = ${table}.genre_id ` // Join Table Query
+    query += `JOIN book_authors ON book_authors.id = ${table}.author_id ` // Join Table Query
+    query += `JOIN book_status ON book_status.id = ${table}.status_id ` // Join Table Query
+
+    if (data.sort) {
+      query += `ORDER BY ${table}.name DESC `
     } else {
-      query = `SELECT * FROM ${table} ${parseInt(data.id) ? 'WHERE ?' : ''} LIMIT ${end} OFFSET ${start}`
+      query += `ORDER BY ${table}.name ASC `
     }
 
+    // If id not null add where condition
+    if (data.name) {
+      query += `WHERE ${table}.name LIKE '%${data.name}%'`
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
+    } else if (data.id) {
+      query += `WHERE ${table}.id = ${parseInt(data.id)}`
+    } else {
+      query += `LIMIT ${start}, ${end}` // Limit Table Query
+    }
+
+    console.log(query)
+
     return new Promise((resolve, reject) => {
-      if (data.id) {
-        db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res))
-      } else {
-        db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
-      }
+      db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
   findBookId: (data) => {
@@ -27,7 +38,11 @@ module.exports = {
     })
   },
   countBook: (data) => {
-    const query = `SELECT id FROM ${table} ${data.name ? `WHERE name LIKE '%${data.name}%'` : 'WHERE ?'}`
+    let query = `SELECT books.id FROM ${table} `
+    query += `JOIN book_genres ON book_genres.id = ${table}.genre_id ` // Join Table Query
+    query += `JOIN book_authors ON book_authors.id = ${table}.author_id ` // Join Table Query
+    query += `JOIN book_status ON book_status.id = ${table}.status_id ` // Join Table Query
+    query += `${data.name ? `WHERE ${table}.name LIKE '%${data.name}%' ` : ''}` // On Search active
 
     return new Promise((resolve, reject) => {
       if (data.name) {

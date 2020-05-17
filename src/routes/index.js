@@ -2,11 +2,7 @@ const router = require('express').Router()
 const resData = require('../helper/response')
 
 router.get('/', (req, res) => {
-  const data = [
-    'mantap', 'oke', 'ahsiap'
-  ]
-
-  res.send(resData(false, 'oke sip', data))
+  res.send(resData(true, 'Welcome to kuma backend'))
 })
 
 module.exports = router

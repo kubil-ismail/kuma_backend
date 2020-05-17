@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10)
 const jwt = require('jsonwebtoken')
 const emailVerify = require('../utils/emailVerify')
-const uniqid = require('uniqid')
+const uniqid = Math.floor(1000 + Math.random() * 9000)
 const resData = require('../helper/response')
 
 module.exports = {
@@ -62,13 +62,13 @@ module.exports = {
           role_id: checkPin ? 2 : 1
         }
         // Send Email verify
-        const sendEmail = emailVerify({ email: email, code: uniqid() })
+        const sendEmail = emailVerify({ email: email, code: uniqid })
         sendEmail.then(_result => {
           // Create New User
           const createUser = authModel.createUser(data)
           createUser.then(_result => {
             res.status(200).send(resData(
-              true, 'Registration successful', { userId: _result.insertId }
+              true, 'Registration successful', { userId: _result.insertId, email: email }
             ))
           }).catch(_ => {
             res.status(400).send(resData(
@@ -76,6 +76,7 @@ module.exports = {
             ))
           })
         }).catch(_ => {
+          console.log(_)
           res.status(400).send(resData(
             false, 'Email failed to send'
           ))

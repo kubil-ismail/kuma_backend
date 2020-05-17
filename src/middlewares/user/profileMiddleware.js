@@ -1,22 +1,27 @@
 const { Validator } = require('node-input-validator')
+const resData = require('../../helper/response')
 
 const validCreate = (req, res, next) => {
   // Validator
   const valid = new Validator(req.body, {
-    name: 'required|string',
+    fullname: 'required|string',
     bio: 'required|string',
     birthdate: 'required|string',
     gender: 'required|string',
-    sosmedId: 'required|numeric',
-    userId: 'required|numeric'
+    social_media_id: 'required|numeric',
+    user_id: 'required|numeric'
   })
 
+  let error = ''
+
   valid.check().then((matched) => {
+    for (const prop in valid.errors) {
+      error = valid.errors[prop].message
+    }
     if (!matched) {
-      res.status(422).send({
-        status: false,
-        error: valid.errors
-      })
+      res.status(422).send(resData(
+        false, error
+      ))
     } else {
       next()
     }
@@ -26,12 +31,12 @@ const validCreate = (req, res, next) => {
 const validUpate = (req, res, next) => {
   // Validator
   const valid = new Validator(req.body, {
-    name: 'string',
+    fullname: 'string',
     bio: 'string',
     birthdate: 'string',
     gender: 'string',
-    sosmedId: 'numeric',
-    userId: 'numeric'
+    social_media_id: 'numeric',
+    user_id: 'numeric'
   })
 
   valid.check().then((matched) => {

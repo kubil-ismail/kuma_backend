@@ -1,15 +1,25 @@
 const profileModel = require('../../models/user/profileModel')
 const resData = require('../../helper/response')
+const pagination = require('../../utils/pagination')
 
 module.exports = {
   getProfile: async (req, res) => {
     const { id } = req.params
-    const getProfile = profileModel.getProfile({ id: parseInt(id) })
+    const { search } = req.query
+    const totalData = id ? 0 : await profileModel.countProfile({ name: search })
+    const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
+    const getProfile = profileModel.getProfile({ id: parseInt(id), name: search }, paginate.start, paginate.end)
 
     getProfile.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get profile success', result
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Profile not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get profile success', result, paginate
+        ))
+      }
     }).catch(_ => {
       res.status(400).send(resData(
         false, 'Get profile failed'
@@ -17,20 +27,12 @@ module.exports = {
     })
   },
   createProfile: (req, res) => {
-    const { name, bio, birthdate, gender, sosmedId, userId } = req.body
-    const data = {
-      fullname: name,
-      bio: bio,
-      birthdate: birthdate,
-      gender: gender,
-      social_media_id: sosmedId,
-      user_id: userId
-    }
-    const createProfile = profileModel.createProfile(data)
+    const createData = req.body
+    const createProfile = profileModel.createProfile(createData)
 
     createProfile.then(_ => {
       res.status(201).send(resData(
-        true, 'Create profile success', data
+        true, 'Create profile success', createData
       ))
     }).catch(_ => {
       res.status(400).send(resData(
@@ -38,31 +40,29 @@ module.exports = {
       ))
     })
   },
-  updateProfile: (req, res) => {
+  updateProfile: async (req, res) => {
     const { id } = req.params
-    const { name, bio, birthdate, gender, sosmedId, userId } = req.body
-    const data = [
-      {
-        fullname: name,
-        bio: bio,
-        birthdate: birthdate,
-        gender: gender,
-        social_media_id: sosmedId,
-        user_id: userId
-      },
-      { id: parseInt(id) }
-    ]
-    const updateProfile = profileModel.updateProfile(data)
+    const updateData = req.body
+    const checkProfileId = await profileModel.findProfileId({ id: parseInt(id) })
 
-    updateProfile.then(_ => {
-      res.status(200).send(resData(
-        true, 'Update profile success', data
-      ))
-    }).catch(_ => {
+    if (checkProfileId) {
+      const data = [updateData, { id: parseInt(id) }]
+      const updateProfile = profileModel.updateProfile(data)
+
+      updateProfile.then(_ => {
+        res.status(200).send(resData(
+          true, 'Update profile success', data
+        ))
+      }).catch(_ => {
+        res.status(400).send(resData(
+          false, 'Update profile failed'
+        ))
+      })
+    } else {
       res.status(400).send(resData(
-        false, 'Update profile failed'
+        false, 'Profile not found'
       ))
-    })
+    }
   },
   deleteProfile: (req, res) => {
     const { id } = req.params
@@ -70,11 +70,11 @@ module.exports = {
 
     deleteProfile.then(_ => {
       res.status(200).send(resData(
-        true, 'Data berhasil dihapus', { userId: id }
+        true, 'Delete profile success', { userId: id }
       ))
     }).catch(_ => {
       res.status(400).send(resData(
-        false, 'Data gagal dihapus'
+        false, 'Data profile success'
       ))
     })
   }

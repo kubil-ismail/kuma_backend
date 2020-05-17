@@ -34,8 +34,8 @@ module.exports = {
       perPage: getPerPage(limit),
       totalPage: totalPage,
       totalData: length,
-      next: prevLink,
-      prev: nextLink,
+      next: nextLink,
+      prev: prevLink,
       start: startPage,
       end: endPage
     }

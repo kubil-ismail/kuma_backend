@@ -1,5 +1,3 @@
-require('dotenv').config()
-const { APP_URL } = process.env
 const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
@@ -9,16 +7,23 @@ const resData = require('../../helper/response')
 module.exports = {
   getBook: async (req, res) => {
     const { id } = req.params
-    const { search } = req.query
-    const totalData = await bookModel.countBook({ name: search })
+    const { search, sort } = req.query
+    const totalData = id ? 0 : await bookModel.countBook({ name: search })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
-    const getBook = bookModel.getBook({ id: parseInt(id), name: search }, paginate.start, paginate.end)
+    const getBook = bookModel.getBook({ id: parseInt(id), name: search, sort: sort }, paginate.start, paginate.end)
 
     getBook.then((result) => {
-      res.status(200).send(resData(
-        true, 'Get book success', result, paginate
-      ))
+      if (result.length < 1) {
+        res.status(400).send(resData(
+          false, 'Book not found'
+        ))
+      } else {
+        res.status(200).send(resData(
+          true, 'Get book success', result, paginate
+        ))
+      }
     }).catch(_ => {
+      console.log(_)
       res.status(400).send(resData(
         false, 'Get book failed'
       ))
@@ -42,14 +47,19 @@ module.exports = {
         genreId: 'required|numeric',
         authorId: 'required|numeric',
         statusId: 'required|numeric',
-        published: 'required|dateiso',
+        published: 'required',
         language: 'required|string'
       })
 
+      let error = ''
+
       valid.check().then((matched) => {
+        for (const prop in valid.errors) {
+          error = valid.errors[prop].message
+        }
         if (!matched) {
           res.status(422).send(resData(
-            false, valid.errors
+            false, error
           ))
         }
       })
@@ -59,7 +69,7 @@ module.exports = {
       const data = {
         name: name,
         description: description,
-        cover: `${APP_URL}book/cover/${filename}`,
+        cover: `book/cover/${filename}`,
         genre_id: genreId,
         author_id: authorId,
         status_id: statusId,
@@ -82,21 +92,8 @@ module.exports = {
   updateBook: async (req, res) => {
     const { id } = req.params
     const getBook = await bookModel.findBookId({ id: parseInt(id) })
-    const { name, description, genreId, authorId, statusId, published, language } = req.body
-
-    const data = [
-      {
-        name: name,
-        description: description,
-        genre_id: genreId,
-        author_id: authorId,
-        status_id: statusId,
-        published: published,
-        language: language,
-        update_at: new Date()
-      },
-      { id: parseInt(id) }
-    ]
+    const updateData = req.body
+    const data = [updateData, { id: parseInt(id) }]
 
     if (getBook) {
       const updateBook = bookModel.updateBook(data)
@@ -116,7 +113,7 @@ module.exports = {
     }
   },
   updateCoverBook: (req, res) => {
-    upload(req, res, () => {
+    upload(req, res, async () => {
       if (req.fileValidationError) {
         return res.status(400).send(resData(
           false, req.fileValidationError
@@ -129,24 +126,32 @@ module.exports = {
 
       const { id } = req.params
       const { filename } = req.file
-      const data = [
-        {
-          cover: `${APP_URL}book/cover/${filename}`,
-          update_at: new Date()
-        },
-        { id: parseInt(id) }
-      ]
+      const getBook = await bookModel.findBookId({ id: parseInt(id) })
 
-      const updateBook = bookModel.updateBook(data)
-      updateBook.then(_ => {
-        res.status(200).send(resData(
-          true, 'Update cover book success', data
-        ))
-      }).catch(_ => {
+      if (getBook) {
+        const data = [
+          {
+            cover: `book/cover/${filename}`,
+            update_at: new Date()
+          },
+          { id: parseInt(id) }
+        ]
+
+        const updateBook = bookModel.updateBook(data)
+        updateBook.then(_ => {
+          res.status(200).send(resData(
+            true, 'Update cover book success', data
+          ))
+        }).catch(_ => {
+          res.status(400).send(resData(
+            false, 'Update cover book failed'
+          ))
+        })
+      } else {
         res.status(400).send(resData(
-          false, 'Update cover book failed'
+          false, 'Book not found'
         ))
-      })
+      }
     })
   },
   deleteBook: (req, res) => {
