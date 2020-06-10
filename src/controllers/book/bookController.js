@@ -2,7 +2,7 @@ const bookModel = require('../../models/book/bookModel')
 const pagination = require('../../utils/pagination')
 const upload = require('../../utils/multer')
 const { Validator } = require('node-input-validator')
-const resData = require('../../helper/response')
+const response = require('../../helper/response')
 
 module.exports = {
   getBook: async (req, res) => {
@@ -14,17 +14,17 @@ module.exports = {
 
     getBook.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Book not found'
         ))
       } else {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Get book success', result, paginate
         ))
       }
     }).catch(_ => {
       console.log(_)
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Get book failed'
       ))
     })
@@ -32,11 +32,11 @@ module.exports = {
   createBook: (req, res) => {
     upload(req, res, () => {
       if (req.fileValidationError) {
-        return res.status(400).send(resData(
+        return res.status(400).send(response(
           false, req.fileValidationError
         ))
       } else if (!req.file) {
-        return res.status(400).send(resData(
+        return res.status(400).send(response(
           false, 'Please select an image to upload'
         ))
       }
@@ -58,7 +58,7 @@ module.exports = {
           error = valid.errors[prop].message
         }
         if (!matched) {
-          res.status(422).send(resData(
+          res.status(422).send(response(
             false, error
           ))
         }
@@ -79,11 +79,11 @@ module.exports = {
       const createBook = bookModel.createBook(data)
 
       createBook.then(_ => {
-        res.status(201).send(resData(
+        res.status(201).send(response(
           true, 'Create book success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Create book failed'
         ))
       })
@@ -98,16 +98,16 @@ module.exports = {
     if (getBook) {
       const updateBook = bookModel.updateBook(data)
       updateBook.then(_ => {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Update book success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Update book failed'
         ))
       })
     } else {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Book not found'
       ))
     }
@@ -115,11 +115,11 @@ module.exports = {
   updateCoverBook: (req, res) => {
     upload(req, res, async () => {
       if (req.fileValidationError) {
-        return res.status(400).send(resData(
+        return res.status(400).send(response(
           false, req.fileValidationError
         ))
       } else if (!req.file) {
-        return res.status(400).send(resData(
+        return res.status(400).send(response(
           false, 'Please select an image to upload'
         ))
       }
@@ -139,16 +139,16 @@ module.exports = {
 
         const updateBook = bookModel.updateBook(data)
         updateBook.then(_ => {
-          res.status(200).send(resData(
+          res.status(200).send(response(
             true, 'Update cover book success', data
           ))
         }).catch(_ => {
-          res.status(400).send(resData(
+          res.status(400).send(response(
             false, 'Update cover book failed'
           ))
         })
       } else {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Book not found'
         ))
       }
@@ -159,11 +159,11 @@ module.exports = {
     const deleteBook = bookModel.deleteBook({ id: id })
 
     deleteBook.then(_ => {
-      res.status(200).send(resData(
+      res.status(200).send(response(
         true, 'Delete book success', { idBook: id }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Delete book failed'
       ))
     })

@@ -4,13 +4,13 @@ const validator = require('../../../middlewares/book/bookMiddleware')
 const { getBook, createBook, updateBook, updateCoverBook, deleteBook } = require('../../../controllers/book/bookController')
 
 // Middleware
-router.use(auth)
+// router.use(auth)
 
 // Routes
 router.get('/:id?', getBook)
-router.post('/', createBook)
-router.patch('/:id', validator, updateBook)
-router.patch('/cover/:id', updateCoverBook)
-router.delete('/:id', deleteBook)
+  .post('/', createBook)
+  .patch('/:id', validator, updateBook)
+  .patch('/cover/:id', updateCoverBook)
+  .delete('/:id', deleteBook)
 
 module.exports = router

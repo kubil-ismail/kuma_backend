@@ -1,5 +1,5 @@
 const reviewModel = require('../../models/book/reviewModel')
-const resData = require('../../helper/response')
+const response = require('../../helper/response')
 const pagination = require('../../utils/pagination')
 
 module.exports = {
@@ -12,16 +12,16 @@ module.exports = {
 
     getReview.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Review not found'
         ))
       } else {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Get review success', result, paginate
         ))
       }
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Get review failed'
       ))
     })
@@ -31,11 +31,11 @@ module.exports = {
     const createReview = reviewModel.createReview(creteData)
 
     createReview.then(_ => {
-      res.status(201).send(resData(
+      res.status(201).send(response(
         true, 'Create review success', creteData
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Create review failed'
       ))
     })
@@ -51,16 +51,16 @@ module.exports = {
       const updateReview = reviewModel.updateReview(data)
 
       updateReview.then(_ => {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Update review success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Update review failed'
         ))
       })
     } else {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Review not found'
       ))
     }
@@ -70,11 +70,11 @@ module.exports = {
     const deleteReview = reviewModel.deleteReview({ id: id })
 
     deleteReview.then(_ => {
-      res.status(200).send(resData(
+      res.status(200).send(response(
         true, 'Delete review success', { idReview: id }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Delete review success'
       ))
     })

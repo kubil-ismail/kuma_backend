@@ -21,6 +21,12 @@ module.exports = {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
+  getProfileNew: (data) => {
+    const query = `SELECT * FROM ${table} WHERE id = ${data.id}`
+    return new Promise((resolve, reject) => {
+      db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
+    })
+  },
   findProfileId: (data) => {
     const query = `SELECT id FROM ${table} WHERE ?`
 

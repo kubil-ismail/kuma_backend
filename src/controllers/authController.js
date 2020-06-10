@@ -6,7 +6,7 @@ const salt = bcrypt.genSaltSync(10)
 const jwt = require('jsonwebtoken')
 const emailVerify = require('../utils/emailVerify')
 const uniqid = Math.floor(1000 + Math.random() * 9000)
-const resData = require('../helper/response')
+const response = require('../helper/response')
 
 module.exports = {
   loginAuth: (req, res) => {
@@ -17,7 +17,7 @@ module.exports = {
     checkLogin.then(_result => {
       // Check account status
       if (!_result.activate) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Please activate your account !'
         ))
       } else {
@@ -27,23 +27,23 @@ module.exports = {
           // Create Api Key
           jwt.sign({ _result }, APP_KEY, (err, token) => {
             if (!err) {
-              res.status(200).send(resData(
-                true, 'Login successful', { apiKey: token, role: _result.role_id }
+              res.status(200).send(response(
+                true, 'Login successful', { apiKey: token, userId: _result.id, role: _result.role_id }
               ))
             } else {
-              res.status(400).send(resData(
+              res.status(400).send(response(
                 false, 'Unable to sign in at this time, try for a few moments'
               ))
             }
           })
         } else {
-          res.status(400).send(resData(
+          res.status(400).send(response(
             false, 'Password do not match'
           ))
         }
       }
     }).catch(_ => res.status(400).send(
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Email not registered'
       ))
     ))
@@ -67,26 +67,25 @@ module.exports = {
           // Create New User
           const createUser = authModel.createUser(data)
           createUser.then(_result => {
-            res.status(200).send(resData(
+            res.status(200).send(response(
               true, 'Registration successful', { userId: _result.insertId, email: email }
             ))
           }).catch(_ => {
-            res.status(400).send(resData(
+            res.status(400).send(response(
               false, 'Registration successful'
             ))
           })
         }).catch(_ => {
-          console.log(_)
-          res.status(400).send(resData(
+          res.status(400).send(response(
             false, 'Email failed to send'
           ))
         })
       } else {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Email already registered'
         ))
       }
-    }).catch(_ => res.status(400).send(resData(
+    }).catch(_ => res.status(400).send(response(
       false, 'Cant Sign In Right Now'
     )))
   },
@@ -97,22 +96,22 @@ module.exports = {
     // Check Code if exist
     checkCode.then(_result => {
       if (_result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Invalid Code'
         ))
       } else {
         // Activate Code
         const activate = authModel.activateUser({ email: email })
         activate.then(_ => {
-          res.status(200).send(resData(
+          res.status(200).send(response(
             true, 'Activation successful'
           ))
-        }).catch(_ => res.status(400).send(resData(
+        }).catch(_ => res.status(400).send(response(
           false, 'Activation failed'
         )))
       }
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Activation failed'
       ))
     })
