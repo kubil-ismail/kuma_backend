@@ -46,6 +46,27 @@ module.exports = {
       ))
     })
   },
+  // Get favorite book user
+  getProfileFavorite: (req, res) => {
+    const { id } = req.params
+    const getProfileFavorite = profileModel.getProfileFavorite({ id: parseInt(id) })
+
+    getProfileFavorite.then((result) => {
+      if (result.length < 1) {
+        res.status(400).send(response(
+          false, 'Favorite book not found'
+        ))
+      } else {
+        res.status(200).send(response(
+          true, 'Get Favorite book success', result
+        ))
+      }
+    }).catch(_ => {
+      res.status(400).send(response(
+        false, 'Get Favorite book failed'
+      ))
+    })
+  },
   createProfile: (req, res) => {
     const createData = req.body
     const createProfile = profileModel.createProfile(createData)

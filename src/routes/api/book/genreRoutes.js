@@ -8,8 +8,8 @@ const { getGenre, createGenre, updateGenre, deleteGenre } = require('../../../co
 
 // Routes
 router.get('/:id?', getGenre)
-  .post('/', validator, createGenre)
-  .patch('/:id', validator, updateGenre)
-  .delete('/:id', deleteGenre)
+  .post('/', auth, validator, createGenre)
+  .patch('/:id', auth, validator, updateGenre)
+  .delete('/:id', auth, deleteGenre)
 
 module.exports = router

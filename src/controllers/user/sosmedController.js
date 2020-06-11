@@ -50,6 +50,7 @@ module.exports = {
           true, 'Update sosmed success', data
         ))
       }).catch(_ => {
+        console.log(_)
         res.status(400).send(response(
           false, 'Update sosmed failed'
         ))

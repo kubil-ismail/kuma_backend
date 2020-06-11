@@ -4,7 +4,7 @@ const validator = require('../../../middlewares/book/reviewMiddleware')
 const { getReview, createReview, updateReview, deleteReview } = require('../../../controllers/book/reviewController')
 
 // Middleware
-// router.use(auth)
+router.use(auth)
 
 // Routes
 router.get('/:id?', getReview)

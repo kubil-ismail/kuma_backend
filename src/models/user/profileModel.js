@@ -27,6 +27,14 @@ module.exports = {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
+  getProfileFavorite: (data) => {
+    let query = 'SELECT book_favorites.id AS book_favorites_id, books.* FROM book_favorites '
+    query += `JOIN books ON book_favorites.book_id = books.id WHERE book_favorites.user_id = ${data.id}` // Join Table Query
+
+    return new Promise((resolve, reject) => {
+      db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
+    })
+  },
   findProfileId: (data) => {
     const query = `SELECT id FROM ${table} WHERE ?`
 

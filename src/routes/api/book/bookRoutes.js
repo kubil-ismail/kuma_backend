@@ -8,9 +8,9 @@ const { getBook, createBook, updateBook, updateCoverBook, deleteBook } = require
 
 // Routes
 router.get('/:id?', getBook)
-  .post('/', createBook)
-  .patch('/:id', validator, updateBook)
-  .patch('/cover/:id', updateCoverBook)
-  .delete('/:id', deleteBook)
+  .post('/', auth, createBook)
+  .patch('/:id', auth, validator, updateBook)
+  .patch('/cover/:id', auth, updateCoverBook)
+  .delete('/:id', auth, deleteBook)
 
 module.exports = router

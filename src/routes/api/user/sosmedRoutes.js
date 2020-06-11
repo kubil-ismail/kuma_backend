@@ -4,7 +4,7 @@ const validSosmed = require('../../../middlewares/user/sosmedMiddleware')
 const { getSosmed, createSosmed, updateSosmed, deleteSosmed } = require('../../../controllers/user/sosmedController')
 
 // Middleware
-// router.use(auth)
+router.use(auth)
 router.use(validSosmed)
 
 // Routes

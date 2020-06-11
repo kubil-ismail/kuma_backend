@@ -4,7 +4,7 @@ const validator = require('../../../middlewares/book/authorMiddleware')
 const { getAuthor, createAuthor, updateAuthor, deleteAuthor } = require('../../../controllers/book/authorController')
 
 // Middleware
-// router.use(auth)
+router.use(auth)
 
 // Routes
 router.get('/:id?', getAuthor)
