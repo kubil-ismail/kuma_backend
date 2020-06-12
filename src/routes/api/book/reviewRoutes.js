@@ -4,12 +4,12 @@ const validator = require('../../../middlewares/book/reviewMiddleware')
 const { getReview, createReview, updateReview, deleteReview } = require('../../../controllers/book/reviewController')
 
 // Middleware
-router.use(auth)
+// router.use(auth)
 
 // Routes
 router.get('/:id?', getReview)
-  .post('/', validator, createReview)
-  .patch('/:id', validator, updateReview)
-  .delete('/:id', deleteReview)
+  .post('/', auth, validator, createReview)
+  .patch('/:id', auth, validator, updateReview)
+  .delete('/:id', auth, deleteReview)
 
 module.exports = router

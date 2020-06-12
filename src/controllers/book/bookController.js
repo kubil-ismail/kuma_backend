@@ -10,11 +10,35 @@ module.exports = {
     const { search, sort } = req.query
     const totalData = id ? 0 : await bookModel.countBook({ name: search })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
-    const getBook = bookModel.getBook({ id: parseInt(id), name: search, sort: sort }, paginate.start, paginate.end)
+    const getBook = bookModel.getBook({ id: parseInt(id), name: search, sort: sort }, paginate.start, req.query.limit)
 
     getBook.then((result) => {
       if (result.length < 1) {
         res.status(400).send(response(
+          false, 'Book not found'
+        ))
+      } else {
+        res.status(200).send(response(
+          true, 'Get book success', result, paginate
+        ))
+      }
+    }).catch(_ => {
+      console.log(_)
+      res.status(400).send(response(
+        false, 'Get book failed'
+      ))
+    })
+  },
+  getGenresBook: async (req, res) => {
+    const { id, idGenre } = req.params
+    const { search, sort } = req.query
+    const totalData = id ? 0 : await bookModel.countBookGenre({ idGenre: idGenre })
+    const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
+    const getBook = bookModel.getGenreBook({ id: parseInt(id), name: search, sort: sort, idGenre: idGenre }, paginate.start, req.query.limit)
+    console.log(paginate)
+    getBook.then((result) => {
+      if (result.length < 1) {
+        res.status(200).send(response(
           false, 'Book not found'
         ))
       } else {

@@ -12,7 +12,7 @@ module.exports = {
 
     getReview.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(response(
+        res.status(200).send(response(
           false, 'Review not found'
         ))
       } else {

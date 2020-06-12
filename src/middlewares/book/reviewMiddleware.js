@@ -4,8 +4,8 @@ const resData = require('../../helper/response')
 const validTest = (req, res, next) => {
   // Validator
   const valid = new Validator(req.body, {
-    book_id: 'required|string',
-    user_id: 'required|string',
+    book_id: 'required|numeric',
+    user_id: 'required|numeric',
     review: 'string|maxLength:300',
     rating: 'numeric'
   })
