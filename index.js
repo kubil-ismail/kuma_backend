@@ -9,19 +9,19 @@ const resData = require('./src/helper/response')
 // CORS All
 app.use(cors())
 
-// Allowed Origins
-var allowedOrigins = ['https://www.jagoanhosting.com/']
+// Allowed Url Origins
+// const allowedOrigins = ['http://127.0.0.1:500']
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // (like mobile apps or curl requests)
-    if (!origin) return callback(null, true); if (allowedOrigins.indexOf(origin) === -1) {
-      var msg = 'The CORS policy for this site does not ' +
-        'allow access from the specified Origin.'
-      return callback(new Error(msg), false)
-    } return callback(null, true)
-  }
-}))
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     // (like mobile apps or curl requests)
+//     if (!origin) return callback(null, true); if (allowedOrigins.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not ' +
+//         'allow access from the specified Origin.'
+//       return callback(new Error(msg), false)
+//     } return callback(null, true)
+//   }
+// }))
 
 // Setting up bodyParser to use json and set it to req.body
 app.use(bodyParser.json())
@@ -63,6 +63,6 @@ app.get('*', (req, res) => {
   ))
 })
 
-app.listen(APP_PORT || 3000, () => {
+app.listen(APP_PORT || 8000, () => {
   console.log('Server run on port 3000')
 })

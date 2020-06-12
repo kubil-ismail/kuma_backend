@@ -8,8 +8,8 @@ router.use(auth)
 
 // Routes
 router.get('/:id?', getAuthor)
-router.post('/', validator, createAuthor)
-router.patch('/:id', validator, updateAuthor)
-router.delete('/:id', deleteAuthor)
+  .post('/', validator, createAuthor)
+  .patch('/:id', validator, updateAuthor)
+  .delete('/:id', deleteAuthor)
 
 module.exports = router

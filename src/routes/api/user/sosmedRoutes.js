@@ -9,8 +9,8 @@ router.use(validSosmed)
 
 // Routes
 router.get('/:id?', getSosmed)
-router.post('/', createSosmed)
-router.patch('/:id', updateSosmed)
-router.delete('/:id', deleteSosmed)
+  .post('/', createSosmed)
+  .patch('/:id', updateSosmed)
+  .delete('/:id', deleteSosmed)
 
 module.exports = router

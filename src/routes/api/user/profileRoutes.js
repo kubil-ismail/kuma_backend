@@ -1,15 +1,17 @@
 const router = require('express').Router()
 const auth = require('../../../utils/auth')
 const { validCreate, validUpate } = require('../../../middlewares/user/profileMiddleware')
-const { getProfile, createProfile, updateProfile, deleteProfile } = require('../../../controllers/user/profileContoller')
+const { getProfile, getProfileNew, getProfileFavorite, createProfile, updateProfile, deleteProfile } = require('../../../controllers/user/profileContoller')
 
 // Middleware
 router.use(auth)
 
 // Routes
 router.get('/:id?', getProfile)
-router.post('/', validCreate, createProfile)
-router.patch('/:id', validUpate, updateProfile)
-router.delete('/:id', deleteProfile)
+  .get('/new/:id', getProfileNew)
+  .get('/favorite/:id', getProfileFavorite)
+  .post('/', validCreate, createProfile)
+  .patch('/:id', validUpate, updateProfile)
+  .delete('/:id', deleteProfile)
 
 module.exports = router

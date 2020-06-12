@@ -1,5 +1,5 @@
 const sosmedModel = require('../../models/user/sosmedModel')
-const resData = require('../../helper/response')
+const response = require('../../helper/response')
 
 module.exports = {
   getSosmed: (req, res) => {
@@ -8,16 +8,16 @@ module.exports = {
 
     getSosmed.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Sosmed not found'
         ))
       } else {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Get sosmed success', result
         ))
       }
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Get sosmed failed'
       ))
     })
@@ -27,11 +27,11 @@ module.exports = {
     const createSosmed = sosmedModel.createSosmed(createData)
 
     createSosmed.then(_ => {
-      res.status(201).send(resData(
+      res.status(201).send(response(
         true, 'Create sosmed success', createData
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Create sosmed failed'
       ))
     })
@@ -46,16 +46,17 @@ module.exports = {
       const updateSosmed = sosmedModel.updateSosmed(data)
 
       updateSosmed.then(_ => {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Update sosmed success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        console.log(_)
+        res.status(400).send(response(
           false, 'Update sosmed failed'
         ))
       })
     } else {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Sosmed not found'
       ))
     }
@@ -65,11 +66,11 @@ module.exports = {
     const deleteSosmed = sosmedModel.deleteSosmed({ id: id })
 
     deleteSosmed.then(_ => {
-      res.status(200).send(resData(
+      res.status(200).send(response(
         true, 'Delete sosmed success', { userId: id }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Data sosmed success'
       ))
     })

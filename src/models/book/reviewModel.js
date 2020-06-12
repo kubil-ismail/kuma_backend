@@ -10,14 +10,16 @@ module.exports = {
     // If query search active
     if (parseInt(data.query.book_id)) {
       query += `WHERE ${table}.book_id = ${parseInt(data.query.book_id)} ` // Get Where
-    } else if (parseInt(data.query.user_id)) {
-      query += `WHERE ${table}.user_id = ${parseInt(data.query.user_id)} ` // Get Where
+    } else if (parseInt(data.query.userId)) {
+      query += `WHERE ${table}.user_id = ${parseInt(data.query.userId)} ` // Get Where
     }
 
     // If data id active
     if (parseInt(data.id)) {
       query += `WHERE ${table}.id = ${parseInt(data.id)} ` // Get Where
+      query += 'ORDER BY book_reviews.id DESC '
     } else {
+      query += 'ORDER BY book_reviews.id DESC '
       query += `LIMIT ${start}, ${end} ` // Limit Table Query
     }
 
