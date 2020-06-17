@@ -1,6 +1,8 @@
 const reviewModel = require('../../models/book/reviewModel')
 const response = require('../../helper/response')
 const pagination = require('../../utils/pagination')
+const Filter = require('bad-words')
+const filter = new Filter()
 
 module.exports = {
   getReview: async (req, res) => {
@@ -27,7 +29,15 @@ module.exports = {
     })
   },
   createReview: (req, res) => {
-    const creteData = req.body
+    // Contoh kata kasar aja ini ya :)
+    filter.addWords('eek')
+
+    const creteData = {
+      book_id: req.body.book_id,
+      user_id: req.body.user_id,
+      review: filter.clean(req.body.review),
+      rating: req.body.rating
+    }
     const createReview = reviewModel.createReview(creteData)
 
     createReview.then(_ => {
