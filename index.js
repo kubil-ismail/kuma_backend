@@ -10,7 +10,11 @@ const resData = require('./src/helper/response')
 // app.use(cors())
 
 // Allowed Url Origins
-const allowedOrigins = ['http://localhost:3000']
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'https://kumabook-c675d.web.app'
+]
 
 app.use(cors({
   origin: function (origin, callback) {

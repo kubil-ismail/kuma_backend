@@ -47,9 +47,11 @@ module.exports = {
     })
   },
   // Get favorite book user
-  getProfileFavorite: (req, res) => {
+  getProfileFavorite: async (req, res) => {
     const { id } = req.params
-    const getProfileFavorite = profileModel.getProfileFavorite({ id: parseInt(id) })
+    const totalData = await profileModel.countFavorite({ id: id })
+    const paginate = pagination.set(req.query, totalData)
+    const getProfileFavorite = profileModel.getProfileFavorite({ id: parseInt(id) }, paginate.start, paginate.end)
 
     getProfileFavorite.then((result) => {
       if (result.length < 1) {
@@ -58,7 +60,7 @@ module.exports = {
         ))
       } else {
         res.status(200).send(response(
-          true, 'Get Favorite book success', result
+          true, 'Get Favorite book success', result, paginate
         ))
       }
     }).catch(_ => {

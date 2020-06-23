@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10)
 const jwt = require('jsonwebtoken')
 const emailVerify = require('../utils/emailVerify')
-const uniqid = Math.floor(1000 + Math.random() * 9000)
 const response = require('../helper/response')
 
 module.exports = {
@@ -52,6 +51,7 @@ module.exports = {
     const { email, password, pin } = req.body
     const checkPin = pin ? bcrypt.compareSync(pin, APP_PIN) : null
     const checkEmail = authModel.findEmail({ email: email })
+    const uniqid = Math.floor(1000 + Math.random() * 9000)
 
     // Check Email if exist
     checkEmail.then(_result => {
@@ -95,7 +95,7 @@ module.exports = {
 
     // Check Code if exist
     checkCode.then(_result => {
-      if (_result.length < 1) {
+      if (_result.affectedRows < 1) {
         res.status(400).send(response(
           false, 'Invalid Code'
         ))
