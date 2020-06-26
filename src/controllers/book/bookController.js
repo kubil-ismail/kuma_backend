@@ -35,7 +35,6 @@ module.exports = {
     const totalData = id ? 0 : await bookModel.countBookGenre({ idGenre: idGenre })
     const paginate = id ? { start: null, end: null } : pagination.set(req.query, totalData)
     const getBook = bookModel.getGenreBook({ id: parseInt(id), name: search, sort: sort, idGenre: idGenre }, paginate.start, req.query.limit)
-    console.log(paginate)
     getBook.then((result) => {
       if (result.length < 1) {
         res.status(200).send(response(
