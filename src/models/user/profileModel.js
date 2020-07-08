@@ -27,12 +27,20 @@ module.exports = {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })
   },
-  getProfileFavorite: (data) => {
+  getProfileFavorite: (data, start, end) => {
     let query = 'SELECT book_favorites.id AS book_favorites_id, books.* FROM book_favorites '
-    query += `JOIN books ON book_favorites.book_id = books.id WHERE book_favorites.user_id = ${data.id}` // Join Table Query
-
+    query += `JOIN books ON book_favorites.book_id = books.id WHERE book_favorites.user_id = ${data.id} ` // Join Table Query
+    query += 'ORDER BY `book_favorites`.`id` DESC '
+    query += `LIMIT ${start}, ${end}` // Limit Table Query
     return new Promise((resolve, reject) => {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
+    })
+  },
+  countFavorite: (data) => {
+    let query = 'SELECT book_favorites.id FROM book_favorites '
+    query += `JOIN books ON book_favorites.book_id = books.id WHERE book_favorites.user_id = ${data.id} ` // Join Table Query
+    return new Promise((resolve, reject) => {
+      db.query(query, data, (err, res) => err ? reject(Error(err)) : resolve(res.length))
     })
   },
   findProfileId: (data) => {
