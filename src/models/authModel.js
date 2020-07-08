@@ -18,7 +18,6 @@ module.exports = {
   },
   findCode: (data) => {
     const query = `DELETE FROM user_activates WHERE user_email = '${data.email}' AND code = '${data.code}' `
-
     return new Promise((resolve, reject) => {
       db.query(query, (err, res) => err ? reject(Error(err)) : resolve(res))
     })

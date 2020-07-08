@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { APP_PORT } = process.env
+const { APP_PORT, APP_URL } = process.env
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -13,6 +13,7 @@ const resData = require('./src/helper/response')
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
+  'http://192.168.1.4:8081',
   'https://kumabook-c675d.web.app'
 ]
 
@@ -68,5 +69,6 @@ app.get('*', (req, res) => {
 })
 
 app.listen(APP_PORT || 8000, () => {
-  console.log('Server run on port 3000')
+  console.log(`Server run on ${APP_PORT}`)
+  console.log(`Rest api URL:  ${APP_URL}`)
 })

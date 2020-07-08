@@ -92,7 +92,6 @@ module.exports = {
   activateAuth: (req, res) => {
     const { email, code } = req.body
     const checkCode = authModel.findCode({ email: email, code: code })
-
     // Check Code if exist
     checkCode.then(_result => {
       if (_result.affectedRows < 1) {

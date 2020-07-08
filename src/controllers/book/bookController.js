@@ -23,7 +23,6 @@ module.exports = {
         ))
       }
     }).catch(_ => {
-      console.log(_)
       res.status(400).send(response(
         false, 'Get book failed'
       ))
@@ -46,7 +45,6 @@ module.exports = {
         ))
       }
     }).catch(_ => {
-      console.log(_)
       res.status(400).send(response(
         false, 'Get book failed'
       ))
