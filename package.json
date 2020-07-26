@@ -2,7 +2,7 @@
   "name": "kuma_backend",
   "version": "1.0.0",
   "engines": {
-    "node": "12.x",
+    "node": ">=10.0",
     "npm": "6.x"
   },
   "description": "Kuma Online Bookstore is an online bookstore built for the details of the book you are looking for and certainly 100% free",

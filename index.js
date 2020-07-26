@@ -7,26 +7,26 @@ const bodyParser = require('body-parser')
 const resData = require('./src/helper/response')
 
 // CORS All
-// app.use(cors())
+app.use(cors())
 
 // Allowed Url Origins
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5000',
-  'http://192.168.1.4:8081',
-  'https://kumabook-c675d.web.app'
-]
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'http://localhost:5000',
+//   'http://192.168.1.4:8081',
+//   'https://kumabook-c675d.web.app'
+// ]
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // (like mobile apps or curl requests)
-    if (!origin) return callback(null, true); if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not ' +
-        'allow access from the specified Origin.'
-      return callback(new Error(msg), false)
-    } return callback(null, true)
-  }
-}))
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     // (like mobile apps or curl requests)
+//     if (!origin) return callback(null, true); if (allowedOrigins.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not ' +
+//         'allow access from the specified Origin.'
+//       return callback(new Error(msg), false)
+//     } return callback(null, true)
+//   }
+// }))
 
 // Setting up bodyParser to use json and set it to req.body
 app.use(bodyParser.json())
