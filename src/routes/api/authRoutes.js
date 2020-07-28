@@ -7,7 +7,7 @@ router.use(validator)
 
 // routes
 router.post('/login', loginAuth)
-router.post('/signin', registerAuth)
-router.post('/activate', activateAuth)
+  .post('/signin', registerAuth)
+  .post('/activate', activateAuth)
 
 module.exports = router

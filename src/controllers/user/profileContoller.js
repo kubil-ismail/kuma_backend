@@ -1,5 +1,5 @@
 const profileModel = require('../../models/user/profileModel')
-const resData = require('../../helper/response')
+const response = require('../../helper/response')
 const pagination = require('../../utils/pagination')
 
 module.exports = {
@@ -12,17 +12,60 @@ module.exports = {
 
     getProfile.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Profile not found'
         ))
       } else {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Get profile success', result, paginate
         ))
       }
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Get profile failed'
+      ))
+    })
+  },
+  getProfileNew: (req, res) => {
+    const { id } = req.params
+    const getProfileNew = profileModel.getProfileNew({ id: parseInt(id) })
+
+    getProfileNew.then((result) => {
+      if (result.length < 1) {
+        res.status(400).send(response(
+          false, 'Profile not found'
+        ))
+      } else {
+        res.status(200).send(response(
+          true, 'Get profile success', result
+        ))
+      }
+    }).catch(_ => {
+      res.status(400).send(response(
+        false, 'Get profile failed'
+      ))
+    })
+  },
+  // Get favorite book user
+  getProfileFavorite: async (req, res) => {
+    const { id } = req.params
+    const totalData = await profileModel.countFavorite({ id: id })
+    const paginate = pagination.set(req.query, totalData)
+    const getProfileFavorite = profileModel.getProfileFavorite({ id: parseInt(id) }, paginate.start, paginate.end)
+
+    getProfileFavorite.then((result) => {
+      if (result.length < 1) {
+        res.status(400).send(response(
+          false, 'Favorite book not found'
+        ))
+      } else {
+        res.status(200).send(response(
+          true, 'Get Favorite book success', result, paginate
+        ))
+      }
+    }).catch(_ => {
+      res.status(400).send(response(
+        false, 'Get Favorite book failed'
       ))
     })
   },
@@ -31,11 +74,11 @@ module.exports = {
     const createProfile = profileModel.createProfile(createData)
 
     createProfile.then(_ => {
-      res.status(201).send(resData(
+      res.status(201).send(response(
         true, 'Create profile success', createData
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Create profile failed'
       ))
     })
@@ -50,16 +93,16 @@ module.exports = {
       const updateProfile = profileModel.updateProfile(data)
 
       updateProfile.then(_ => {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Update profile success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Update profile failed'
         ))
       })
     } else {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Profile not found'
       ))
     }
@@ -69,11 +112,11 @@ module.exports = {
     const deleteProfile = profileModel.deleteProfile({ id: id })
 
     deleteProfile.then(_ => {
-      res.status(200).send(resData(
+      res.status(200).send(response(
         true, 'Delete profile success', { userId: id }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Data profile success'
       ))
     })

@@ -1,9 +1,14 @@
 {
   "name": "kuma_backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.11.1",
+    "npm": "6.x"
+  },
   "description": "Kuma Online Bookstore is an online bookstore built for the details of the book you are looking for and certainly 100% free",
   "main": "index.js",
   "dependencies": {
+    "bad-words": "^3.0.3",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -14,14 +19,17 @@
     "mysql": "^2.18.1",
     "node-input-validator": "^4.2.0",
     "nodemailer": "^6.4.6",
-    "uniqid": "^5.2.0"
+    "uniqid": "^5.2.0",
+    "ejs": "^2.5.6"
   },
   "devDependencies": {
     "standard": "^14.3.4"
   },
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon"
+    "serve": "node index.js",
+    "web": "node index.js"
   },
   "repository": {
     "type": "git",

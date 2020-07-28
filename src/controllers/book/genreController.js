@@ -1,5 +1,5 @@
 const genreModel = require('../../models/book/genreModel')
-const resData = require('../../helper/response')
+const response = require('../../helper/response')
 
 module.exports = {
   getGenre: (req, res) => {
@@ -8,16 +8,16 @@ module.exports = {
 
     getGenre.then((result) => {
       if (result.length < 1) {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Genre not found'
         ))
       } else {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Get genre success', result
         ))
       }
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Get genre failed'
       ))
     })
@@ -27,11 +27,11 @@ module.exports = {
     const createGenre = genreModel.createGenre({ name: name })
 
     createGenre.then(_ => {
-      res.status(201).send(resData(
+      res.status(201).send(response(
         true, 'Create genre success', { name: name }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Create genre failed'
       ))
     })
@@ -46,16 +46,16 @@ module.exports = {
       const updateGenre = genreModel.updateGenre(data)
 
       updateGenre.then(_ => {
-        res.status(200).send(resData(
+        res.status(200).send(response(
           true, 'Update genre success', data
         ))
       }).catch(_ => {
-        res.status(400).send(resData(
+        res.status(400).send(response(
           false, 'Update genre failed'
         ))
       })
     } else {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Genre not found'
       ))
     }
@@ -65,11 +65,11 @@ module.exports = {
     const deleteGenre = genreModel.deleteGenre({ id: id })
 
     deleteGenre.then(_ => {
-      res.status(200).send(resData(
+      res.status(200).send(response(
         true, 'Delete genre success', { idGenre: id }
       ))
     }).catch(_ => {
-      res.status(400).send(resData(
+      res.status(400).send(response(
         false, 'Delete genre success'
       ))
     })
