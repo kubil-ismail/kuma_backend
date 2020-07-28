@@ -50,7 +50,6 @@ app.get('*', (req, res) => {
 })
 
 app.listen(process.env.PORT || 8000, () => {
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
   console.log(`Server run on ${APP_PORT}`)
   console.log(`Rest api URL:  ${APP_URL}`)
 })
